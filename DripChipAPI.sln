@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DripChip", "DripChip\DripChip.csproj", "{7FF85587-C7D4-41EF-B410-8D73868BD58C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DripChip", "DripChip\DripChip.csproj", "{7FF85587-C7D4-41EF-B410-8D73868BD58C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{BFDC5388-56AD-418E-BF0F-67A94115C76A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{3AFFDDA9-2947-4E47-9D4A-CBCF02596B0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7FF85587-C7D4-41EF-B410-8D73868BD58C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FF85587-C7D4-41EF-B410-8D73868BD58C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FF85587-C7D4-41EF-B410-8D73868BD58C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFDC5388-56AD-418E-BF0F-67A94115C76A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFDC5388-56AD-418E-BF0F-67A94115C76A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFDC5388-56AD-418E-BF0F-67A94115C76A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFDC5388-56AD-418E-BF0F-67A94115C76A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AFFDDA9-2947-4E47-9D4A-CBCF02596B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFFDDA9-2947-4E47-9D4A-CBCF02596B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFFDDA9-2947-4E47-9D4A-CBCF02596B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFFDDA9-2947-4E47-9D4A-CBCF02596B0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
