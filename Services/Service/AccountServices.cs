@@ -1,8 +1,14 @@
-﻿using Entities;
+﻿using DripChip;
+using Entities;
+
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.IdentityModel.Tokens;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,8 +42,25 @@ namespace Services.Service
             var account = context.Account.FirstOrDefault(x => x.Id == id);
             if (account != null)
             {
-                account.Password = null;
                 return account;
+            }
+            return null;
+        }
+
+        public string? Auth(string login, string password)
+        {
+            var acc = context.Account.FirstOrDefault(x => x.Email == login && x.Password == password);
+            
+            if(acc != null)
+            {
+                var claims = new List<Claim> { new Claim("Name", login), new Claim("Password", password) };
+                var jwt = new JwtSecurityToken(
+                        issuer: AuthenticationOptions.ISSUER,
+                        audience: AuthenticationOptions.AUDIENCE,
+                claims: claims,
+                signingCredentials: new SigningCredentials(AuthenticationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+                return new JwtSecurityTokenHandler().WriteToken(jwt);
             }
             return null;
         }

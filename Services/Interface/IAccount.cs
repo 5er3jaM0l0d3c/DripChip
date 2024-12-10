@@ -11,5 +11,6 @@ namespace Services.Interface
     {
         public Account? Registration(Account account);
         public Account? GetAccountInfo(int id);
+        public string? Auth(string login,  string password);
     }
 }
