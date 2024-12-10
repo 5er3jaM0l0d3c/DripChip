@@ -15,5 +15,4 @@ public partial class Account
 
     public string Password { get; set; } = null!;
 
-    public virtual ICollection<Animal> Animals { get; set; } = new List<Animal>();
 }

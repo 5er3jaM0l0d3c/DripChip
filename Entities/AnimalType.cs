@@ -9,5 +9,4 @@ public partial class AnimalType
 
     public string Type { get; set; } = null!;
 
-    public virtual ICollection<AnimalAnimalType> AnimalAnimalTypes { get; set; } = new List<AnimalAnimalType>();
 }

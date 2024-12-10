@@ -19,8 +19,6 @@ public partial class Animal
 
     public long ChippingLocationId { get; set; }
 
-    public virtual ICollection<AnimalAnimalType> AnimalAnimalTypes { get; set; } = new List<AnimalAnimalType>();
-
     public virtual Account Chipper { get; set; } = null!;
 
     public virtual Location ChippingLocation { get; set; } = null!;

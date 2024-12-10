@@ -11,5 +11,4 @@ public partial class Location
 
     public double Longitude { get; set; }
 
-    public virtual ICollection<Animal> Animals { get; set; } = new List<Animal>();
 }
