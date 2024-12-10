@@ -1,4 +1,6 @@
+using DripChip;
 using Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Services.Interface;
 using Services.Service;
@@ -6,6 +8,20 @@ using Services.Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = AuthenticationOptions.ISSUER,
+            ValidateAudience = true,
+            ValidAudience = AuthenticationOptions.AUDIENCE,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = AuthenticationOptions.GetSymmetricSecurityKey(),
+        };
+    });
 
 builder.Services.AddDbContext<DripChipContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
