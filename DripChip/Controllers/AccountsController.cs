@@ -23,7 +23,8 @@ namespace DripChip.Controllers
             {
                 return account;
             }
-            return null;
+            return null; //исправить на обработку ошибок
         }
+
     }
 }
