@@ -1,11 +1,15 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Services.Interface;
+using Services.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddDbContext<DripChipContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IAccount, AccountServices>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
