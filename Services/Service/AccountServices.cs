@@ -46,11 +46,8 @@ namespace Services.Service
         public Account? GetAccountInfo(int id)
         {
             var account = context.Account.FirstOrDefault(x => x.Id == id);
-            if (account != null)
-            {
-                return account;
-            }
-            return null;
+
+            return account;
         }
 
         public string? Auth(string login, string password)

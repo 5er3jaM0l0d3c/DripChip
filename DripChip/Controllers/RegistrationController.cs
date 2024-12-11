@@ -23,12 +23,12 @@ namespace DripChip.Controllers
                 || String.IsNullOrWhiteSpace(account.FirstName)
                 || String.IsNullOrWhiteSpace(account.LastName)
                 || String.IsNullOrWhiteSpace(account.Email))
-                return StatusCode(400);
+                return StatusCode(400, "Поле = null, =\"\" или состоит из пробелов");
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
-                return StatusCode(403);
+                return StatusCode(403, "Запрос от авторизованного аккаунта");
 
-            Account? acc;
+            Account? acc = null;
 
             try
             {
@@ -36,7 +36,8 @@ namespace DripChip.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(Int32.Parse(ex.Message));
+                if(ex.Message == "409")
+                    return StatusCode(Int32.Parse(ex.Message), "Аккаунт с таким email уже существует");
             }
 
             if (acc != null)

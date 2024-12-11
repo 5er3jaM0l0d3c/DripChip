@@ -20,7 +20,7 @@ namespace DripChip.Controllers
             var response = Account.Auth(login, password);
             if(response != null)
                 return Content(response);
-            return StatusCode(400);
+            return StatusCode(401, "Неверные авторизационные данные");
         }
     }
 }
