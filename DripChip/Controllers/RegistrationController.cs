@@ -6,7 +6,7 @@ using Services.Interface;
 
 namespace DripChip.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RegistrationController : ControllerBase
     {
