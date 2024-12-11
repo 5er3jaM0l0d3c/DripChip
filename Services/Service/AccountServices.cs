@@ -2,6 +2,7 @@
 using Entities;
 
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interface;
 using System;
@@ -23,7 +24,12 @@ namespace Services.Service
         }
 
         public Account? Registration(Account account)
-        { 
+        {
+            if (context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
+            {
+                throw new Exception("409");
+            }
+
             context.Account.Add(account);
             context.SaveChanges();
 

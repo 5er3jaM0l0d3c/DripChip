@@ -14,3 +14,13 @@ Accept: application/json
 GET {{DripChip_HostAddress}}/accounts/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiRW1haWxAIiwiUGFzc3dvcmQiOiIxMjM0NSIsImlzcyI6IkRyaXBDaGlwQVBJIiwiYXVkIjoiRHJpcENoaXBDbGllbnQifQ.xwtmY9iUzbYd-flu_XevpFNlg1VLx_lpx2PYut0j-Qo
 ###
+
+POST {{DripChip_HostAddress}}/registration
+Accept: application/json,
+{
+  firstName: testing,
+  lastName: testing,
+  email: testing,
+  password: testing
+}
+###
