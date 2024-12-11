@@ -1,0 +1,72 @@
+@DripChip_HostAddress = https://localhost:7173
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiRW1haWxAIiwiUGFzc3dvcmQiOiIxMjM0NSIsImlzcyI6IkRyaXBDaGlwQVBJIiwiYXVkIjoiRHJpcENoaXBDbGllbnQifQ.xwtmY9iUzbYd-flu_XevpFNlg1VLx_lpx2PYut0j-Qo
+
+GET {{DripChip_HostAddress}}/auth/Email@/12345 #Для проверки авторизации
+Accept: application/json
+###
+
+POST {{DripChip_HostAddress}}/registration #200
+Content-Type: application/json
+Accept: application/json
+{
+  account:
+  {
+    firstName: testing,
+    lastName: testing,
+    email: testing,
+    password: testing
+  }
+}
+
+###
+
+POST {{DripChip_HostAddress}}/registration #Запрос от авторизованного аккаунта
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+{
+  account:
+  {
+    firstName: testing,
+    lastName: testing,
+    email: testing,
+    password: testing
+  }
+}
+
+###
+
+POST {{DripChip_HostAddress}}/registration #Отсутствует нужное поле
+Content-Type: application/json
+
+{
+  "firstName": "testing",
+  "email": "testing",
+  "password": "testing"
+}
+
+###
+
+POST {{DripChip_HostAddress}}/registration #Пробелы в поле
+Content-Type: application/json
+
+{
+  "firstName": "testing",
+  "lastName": "    "
+  "email": "testing",
+  "password": "testing"
+}
+
+###
+
+POST {{DripChip_HostAddress}}/registration #Аккаунт с таким Email уже существует
+Content-Type: application/json
+
+{
+  "firstName": "testing",
+  "lastName": "testing"
+  "email": "Email@",
+  "password": "testing"
+}
+
+###
