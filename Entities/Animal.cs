@@ -13,11 +13,17 @@ public partial class Animal
 
     public float Height { get; set; }
 
-    public string Gender { get; set; } = null!;
-
     public int ChipperId { get; set; }
 
     public long ChippingLocationId { get; set; }
+
+    public DateOnly ChippingDateTime { get; set; }
+
+    public DateOnly? DeathDateTime { get; set; }
+
+    public AnimalLifeStatus LifeStatus { get; set; }
+
+    public AnimalGender Gender { get; set; }
 
     public virtual Account Chipper { get; set; } = null!;
 
