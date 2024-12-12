@@ -67,5 +67,51 @@ namespace Services.Service
             }
             return null;
         }
+
+        public List<Account> Search(string? firstName, string? lastName, string? email, int from = 0, int size = 10)
+        {
+            List<Account> accounts = new List<Account>();
+
+            if(firstName != null)
+            {
+                accounts.Distinct().ToList().AddRange(SearchByFirstName(firstName));
+            }
+
+            if (lastName != null)
+            {
+                accounts.Distinct().ToList().AddRange(SearchByLastName(lastName));
+            }
+
+            if (email != null)
+            {
+                accounts.Distinct().ToList().AddRange(SearchByEmail(email));
+            }
+            try
+            {
+                accounts.RemoveRange(0, from);
+                accounts.RemoveRange(size, accounts.Count - size);
+
+            }
+            catch
+            {
+
+            }
+            return accounts;
+        }
+
+        private List<Account> SearchByFirstName(string firstName)
+        {
+            return context.Account.Where(x => x.FirstName.Equals(firstName)).ToList();
+        }
+
+        private List<Account> SearchByLastName(string lastName)
+        {
+            return context.Account.Where(x => x.LastName.Equals(lastName)).ToList();
+        }
+
+        private List<Account> SearchByEmail(string email) 
+        {
+            return context.Account.Where(x => x.Equals(email)).ToList();       
+        }
     }
 }

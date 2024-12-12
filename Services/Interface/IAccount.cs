@@ -12,5 +12,6 @@ namespace Services.Interface
         public Account? Registration(Account account);
         public Account? GetAccountInfo(int id);
         public string? Auth(string login,  string password);
+        public List<Account> Search(string? firstName, string? lastName, string? email, int from = 0, int size = 10);
     }
 }
