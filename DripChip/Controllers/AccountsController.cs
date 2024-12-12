@@ -29,7 +29,7 @@ namespace DripChip.Controllers
                 account.Password = null;
                 return new JsonResult(account);
             }
-            return StatusCode(404, "Аккаунт с таким accountId не найден");
+            return StatusCode(404, "Аккаунт с accountId = " + accountId + " не найден");
         }
 
         [Authorize]
