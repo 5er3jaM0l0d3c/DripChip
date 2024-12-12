@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Entities;
 
@@ -17,13 +18,13 @@ public partial class Animal
 
     public long ChippingLocationId { get; set; }
 
-    public DateOnly ChippingDateTime { get; set; }
+    public DateTime? ChippingDateTime { get; set; }
 
-    public DateOnly? DeathDateTime { get; set; }
+    public DateTime? DeathDateTime { get; set; }
 
-    public AnimalLifeStatus LifeStatus { get; set; }
+    public string LifeStatus { get; set; } = null!;
 
-    public AnimalGender Gender { get; set; }
+    public string Gender { get; set; } = null!;
 
     public virtual Account Chipper { get; set; } = null!;
 

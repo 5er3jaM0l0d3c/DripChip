@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Entities;
 
-public partial class AnimalLocation
+public partial class Animal_Location
 {
     public long LocationId { get; set; }
 
@@ -11,7 +11,7 @@ public partial class AnimalLocation
 
     public long Id { get; set; }
 
-    public DateOnly DateTimeOfVisitLocationPoint { get; set; }
+    public DateTime DateTimeOfVisitLocationPoint { get; set; }
 
     public virtual Animal Animal { get; set; } = null!;
 
