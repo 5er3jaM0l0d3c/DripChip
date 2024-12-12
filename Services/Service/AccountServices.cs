@@ -70,48 +70,45 @@ namespace Services.Service
 
         public List<Account> Search(string? firstName, string? lastName, string? email, int from = 0, int size = 10)
         {
-            List<Account> accounts = new List<Account>();
+            List<Account> accounts = context.Account.ToList();
 
-            if(firstName != null)
+            if (firstName != null)
             {
-                accounts.Distinct().ToList().AddRange(SearchByFirstName(firstName));
+                accounts = accounts.Intersect(SearchByFirstName(firstName)).ToList();
             }
 
             if (lastName != null)
             {
-                accounts.Distinct().ToList().AddRange(SearchByLastName(lastName));
+                accounts = accounts.Intersect(SearchByLastName(lastName)).ToList();
             }
 
             if (email != null)
             {
-                accounts.Distinct().ToList().AddRange(SearchByEmail(email));
+                accounts = accounts.Intersect(SearchByEmail(email)).ToList();
             }
             try
             {
                 accounts.RemoveRange(0, from);
                 accounts.RemoveRange(size, accounts.Count - size);
-
             }
-            catch
-            {
+            catch { }
 
-            }
             return accounts;
         }
 
         private List<Account> SearchByFirstName(string firstName)
         {
-            return context.Account.Where(x => x.FirstName.Equals(firstName)).ToList();
+            return context.Account.Where(x => x.FirstName.ToLower().Contains(firstName.ToLower())).ToList();
         }
 
         private List<Account> SearchByLastName(string lastName)
         {
-            return context.Account.Where(x => x.LastName.Equals(lastName)).ToList();
+            return context.Account.Where(x => x.LastName.ToLower().Contains(lastName.ToLower())).ToList();
         }
 
         private List<Account> SearchByEmail(string email) 
         {
-            return context.Account.Where(x => x.Equals(email)).ToList();       
+            return context.Account.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
         }
     }
 }

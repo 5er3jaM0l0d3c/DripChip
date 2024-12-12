@@ -9,13 +9,10 @@ POST {{DripChip_HostAddress}}/registration #200
 Content-Type: application/json
 Accept: application/json
 {
-  account:
-  {
-    firstName: testing,
-    lastName: testing,
-    email: testing,
-    password: testing
-  }
+  "FirstName": "forSearch",
+  "LastName": "testing",
+  "Email": "qwe@",
+  "Password": "testing"
 }
 
 ###
