@@ -9,6 +9,6 @@ namespace Services.Interface
 {
     public interface IAnimal
     {
-        public object GetAnimalInfo(long animalId);
+        public object? GetAnimalInfo(long? animalId);
     }
 }

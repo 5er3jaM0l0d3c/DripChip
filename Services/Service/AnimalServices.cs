@@ -17,12 +17,12 @@ namespace Services.Service
             this.context = context;
         }
 
-        public object GetAnimalInfo(long animalId)
+        public object? GetAnimalInfo(long? animalId)
         {
             var animal = context.Animal.FirstOrDefault(x => x.Id == animalId);
 
             if (animal == null)
-                throw new Exception("400");
+                return null;
             
             var result = new
             {

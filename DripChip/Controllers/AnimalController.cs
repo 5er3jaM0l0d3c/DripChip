@@ -18,12 +18,15 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpGet("/animals/{animalId}")]
-        public IActionResult GetAnimalInfo(int animalId)
+        public IActionResult GetAnimalInfo(long? animalId)
         {
+            if (animalId == null || animalId <= 0)
+                return StatusCode(400, "animalId = null\nanimalId <= 0");
+
             var animal = Animal.GetAnimalInfo(animalId);
 
             if (animal == null)
-                return StatusCode(404, "Животное с animalId( = " + animalId + " ) не найдено");
+                return StatusCode(404, "Животное с animalId = " + animalId + " не найдено");
 
             return Ok(animal);
         }
