@@ -30,6 +30,7 @@ builder.Services.AddScoped<IAccount, AccountServices>();
 builder.Services.AddScoped<IAnimal, AnimalServices>();
 builder.Services.AddScoped<IAnimalType, AnimalTypeServices>();
 builder.Services.AddScoped<ILocation, LocationServices>();
+builder.Services.AddScoped<IAnimal_Location, Animal_LocationServices>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

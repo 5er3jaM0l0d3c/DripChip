@@ -58,7 +58,6 @@ namespace Services.Service
 
             if (startDateTime != null)
             {
-                //DateTime time = (DateTime)startDateTime;
                 animals = animals.Intersect(SearchByStartDateTime(startDateTime)).ToList();
             }
 
@@ -121,8 +120,6 @@ namespace Services.Service
 
         private List<Animal> SearchByStartDateTime(DateTime? startDateTime)
         {
-            
-            //startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Local);
             return context.Animal.Where(x => x.ChippingDateTime >= startDateTime).ToList();
         }
 
