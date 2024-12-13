@@ -56,7 +56,7 @@ namespace Services.Service
             
             if(acc != null)
             {
-                var claims = new List<Claim> { new Claim("Name", login), new Claim("Password", password) };
+                var claims = new List<Claim> { new Claim("Name", login), new Claim("Password", password), new Claim("Id", acc.Id.ToString()) };
                 var jwt = new JwtSecurityToken(
                         issuer: AuthenticationOptions.ISSUER,
                         audience: AuthenticationOptions.AUDIENCE,
@@ -110,6 +110,23 @@ namespace Services.Service
         private List<Account> SearchByEmail(string email) 
         {
             return context.Account.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+        }
+
+        public Account UpdateAccount(int id, Account account)
+        {
+            account.Id = id;
+
+            if (context.Account.FirstOrDefault(x => x.Id == id) == null)
+                throw new Exception("403");
+            if (account.Email != null && context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
+                throw new Exception("409");
+
+            context.Account.Update(account);
+            context.SaveChanges();
+
+            account.Password = null;
+
+            return account;
         }
     }
 }

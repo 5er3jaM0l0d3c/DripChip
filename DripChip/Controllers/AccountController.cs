@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Services.Interface;
 
 namespace DripChip.Controllers
@@ -45,6 +46,40 @@ namespace DripChip.Controllers
             List<Account> accounts = Account.Search(firstName, lastName, email, from, size);
 
             return new JsonResult(accounts);
+        }
+
+        [Authorize]
+        [HttpPut("accounts/{accountId}")]
+        public IActionResult UpdateAccount(int accountId, [FromBody]Account account)
+        {
+            var userId = User.FindFirst("Id");
+
+            if (userId != null && userId.Value != accountId.ToString())
+                return StatusCode(403, "Обновление не своего аккаунта");
+
+            Account result = new();
+
+            if (accountId <= 0
+                || account.FirstName.IsNullOrEmpty()
+                || account.LastName.IsNullOrEmpty()
+                || account.Email.IsNullOrEmpty())
+                return StatusCode(400);
+
+            try
+            {
+                result = Account.UpdateAccount(accountId, account);
+
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "403")
+                    return StatusCode(403, "Аккаунт не найден");
+                if (ex.Message == "409")
+                    return StatusCode(403, "Аккаунт с таким email уже существует");
+            }
+
+            return StatusCode(400, "Неизвестная ошибка");
         }
     }
 }
