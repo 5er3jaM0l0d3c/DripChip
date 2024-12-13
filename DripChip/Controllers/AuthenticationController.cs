@@ -8,12 +8,21 @@ namespace DripChip.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class RegistrationController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private IAccount Account { get; set; }
-        public RegistrationController(IAccount account)
+        public AuthenticationController(IAccount account)
         {
             Account = account;
+        }
+
+        [HttpGet("/auth/{login}/{password}")]
+        public IActionResult Auth(string login, string password)
+        {
+            var response = Account.Auth(login, password);
+            if (response != null)
+                return Content(response);
+            return StatusCode(401, "Неверные авторизационные данные");
         }
 
         [HttpPost]

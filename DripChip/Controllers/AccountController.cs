@@ -8,10 +8,10 @@ namespace DripChip.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private IAccount Account { get; set; }
-        public AccountsController(IAccount account)
+        public AccountController(IAccount account)
         {
             Account = account;
         }
