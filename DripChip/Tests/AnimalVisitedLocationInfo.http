@@ -1,0 +1,5 @@
+﻿@DripChip_HostAddress = https://localhost:7173
+
+GET {{DripChip_HostAddress}}/animals/2/locations?startdatetime=2024-12-13
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoibG9naW4iLCJQYXNzd29yZCI6InBhc3N3b3JkIiwiaXNzIjoiRHJpcENoaXBBUEkiLCJhdWQiOiJEcmlwQ2hpcENsaWVudCJ9.mJ2X-FpbEFZm07oTgjEtiNgooZHu_0InzmWeqZG3OkU
