@@ -42,6 +42,13 @@ namespace DripChipAPI.Controllers
                                            [FromQuery] int from = 0,
                                            [FromQuery] int size = 10)
         {
+            if (from < 0 || size <= 0
+                || chipperId != null && chipperId <= 0
+                || chippingLocationId != null && chippingLocationId <= 0
+                || lifeStatus != null && lifeStatus.ToLower() != "alive" && lifeStatus.ToLower() != "dead"
+                || gender != null && gender.ToLower() != "male" && gender.ToLower() != "female" && gender.ToLower() != "other")
+                return StatusCode(400);
+
             var result = Animal.SearchAnimal(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
 
             return new JsonResult(result);
