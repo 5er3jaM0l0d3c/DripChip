@@ -28,6 +28,7 @@ builder.Services.AddDbContext<DripChipContext>(option => option.UseNpgsql(builde
 
 builder.Services.AddScoped<IAccount, AccountServices>();
 builder.Services.AddScoped<IAnimal, AnimalServices>();
+builder.Services.AddScoped<IAnimalType, AnimalTypeServices>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

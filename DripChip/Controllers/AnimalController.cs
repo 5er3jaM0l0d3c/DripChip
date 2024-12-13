@@ -28,7 +28,7 @@ namespace DripChipAPI.Controllers
             if (animal == null)
                 return StatusCode(404, "Животное с animalId = " + animalId + " не найдено");
 
-            return Ok(animal);
+            return new JsonResult(animal);
         }
 
         [Authorize]
@@ -44,7 +44,7 @@ namespace DripChipAPI.Controllers
         {
             var result = Animal.SearchAnimal(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
 
-            return Ok(result);
+            return new JsonResult(result);
         }
     }
 }
