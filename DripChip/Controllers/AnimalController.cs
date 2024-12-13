@@ -30,5 +30,21 @@ namespace DripChipAPI.Controllers
 
             return Ok(animal);
         }
+
+        [Authorize]
+        [HttpGet("/animals/search")]
+        public IActionResult SearchAnimals([FromQuery] DateTime? startDateTime,
+                                           [FromQuery] DateTime? endDateTime,
+                                           [FromQuery] int? chipperId,
+                                           [FromQuery] long? chippingLocationId,
+                                           [FromQuery] string? lifeStatus,
+                                           [FromQuery] string? gender,
+                                           [FromQuery] int from = 0,
+                                           [FromQuery] int size = 10)
+        {
+            var result = Animal.SearchAnimal(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
+
+            return Ok(result);
+        }
     }
 }

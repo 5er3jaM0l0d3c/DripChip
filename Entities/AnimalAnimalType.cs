@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Entities;
 
-public partial class Animal_AnimalType
+public partial class AnimalAnimalType
 {
     public long Id { get; set; }
 

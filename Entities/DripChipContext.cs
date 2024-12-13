@@ -19,9 +19,9 @@ public partial class DripChipContext : DbContext
 
     public virtual DbSet<Animal> Animal { get; set; }
 
-    public virtual DbSet<Animal_AnimalType> Animal_AnimalType { get; set; }
+    public virtual DbSet<AnimalAnimalType> Animal_AnimalType { get; set; }
 
-    public virtual DbSet<Animal_Location> Animal_Location { get; set; }
+    public virtual DbSet<AnimalLocation> Animal_Location { get; set; }
 
     public virtual DbSet<AnimalType> AnimalType { get; set; }
 
@@ -33,14 +33,64 @@ public partial class DripChipContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Animal>()
-            .Property(a => a.Gender)
-            .HasColumnType("public.AnimalGender")
-            .HasConversion<string>();
+        modelBuilder
+            .HasPostgresEnum("AnimalGender", new[] { "MALE", "FEMALE", "OTHER" })
+            .HasPostgresEnum("AnimalLifeStatus", new[] { "ALIVE", "DEAD" });
 
-        modelBuilder.Entity<Animal>()
-            .Property(a => a.LifeStatus)
-            .HasColumnType("public.AnimalLifeStatus")
-            .HasConversion<string>();
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Account_pkey");
+
+            entity.ToTable("Account");
+        });
+
+        modelBuilder.Entity<Animal>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Animal_pkey");
+
+            entity.ToTable("Animal");
+
+            entity.Property(e => e.ChippingDateTime)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp(0) without time zone");
+            entity.Property(e => e.DeathDateTime).HasColumnType("timestamp(0) without time zone");
+
+        });
+
+        modelBuilder.Entity<AnimalAnimalType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Animal_AnimalType_pkey");
+
+            entity.ToTable("Animal_AnimalType");
+        });
+
+        modelBuilder.Entity<AnimalLocation>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Animal_Location_pkey");
+
+            entity.ToTable("Animal_Location");
+
+            entity.Property(e => e.DateTimeOfVisitLocationPoint)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp(0) without time zone");
+        });
+
+        modelBuilder.Entity<AnimalType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("AnimalType_pkey");
+
+            entity.ToTable("AnimalType");
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Location_pkey");
+
+            entity.ToTable("Location");
+        });
+
+        OnModelCreatingPartial(modelBuilder);
     }
+
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

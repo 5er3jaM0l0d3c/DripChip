@@ -86,6 +86,7 @@ namespace Services.Service
             {
                 accounts = accounts.Intersect(SearchByEmail(email)).ToList();
             }
+
             try
             {
                 accounts.RemoveRange(0, from);
