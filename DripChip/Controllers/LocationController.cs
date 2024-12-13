@@ -16,7 +16,7 @@ namespace DripChipAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("/locatins/{pointId}")]
+        [HttpGet("/locations/{pointId}")]
         public IActionResult GetLocationInfo(long? pointId)
         {
             if (pointId == null || pointId <= 0)
