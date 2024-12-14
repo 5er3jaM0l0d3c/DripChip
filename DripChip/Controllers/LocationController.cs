@@ -39,7 +39,7 @@ namespace DripChipAPI.Controllers
             if (location.Latitude == null || location.Latitude < -90 || location.Latitude > 90
                 || location.Longitude == null || location.Longitude < -180 || location.Longitude > 180)
                 return StatusCode(400);
-            Location result = new();
+            Location? result = new();
             try
             {
                 result = Location.AddLocation(location);
@@ -47,7 +47,7 @@ namespace DripChipAPI.Controllers
             }
             catch (Exception ex)
             {
-                if(ex.Message == "409")
+                if (ex.Message == "409")
                     return StatusCode(409, "Точка локации с такими latitude = " + location.Latitude +
                         " и longitude = " + location.Longitude + " уже существует");
                 return StatusCode(400, "Неизвестная ошибка");

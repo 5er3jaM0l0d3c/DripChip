@@ -24,9 +24,10 @@ namespace Services.Service
 
         public Location? AddLocation(Location location)
         {
-            if (context.Location.AsNoTracking()
+            if (context.Location
                 .FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude) != null)
                 throw new Exception("409");
+
 
             context.Location.Add(location);
             context.SaveChanges();

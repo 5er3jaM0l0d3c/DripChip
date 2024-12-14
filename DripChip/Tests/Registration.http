@@ -11,7 +11,7 @@ Accept: application/json
 {
   "FirstName": "dddd",
   "LastName": "dddd",
-  "Email": "ddddd",
+  "Email": "i",
   "Password": "qwer"
 }
 
