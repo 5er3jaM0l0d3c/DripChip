@@ -35,5 +35,22 @@ namespace Services.Service
             return context.Location.FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude);
 
         }
+
+        public Location? UpdateLocation(long id, Location location)
+        {
+            location.Id = id;
+
+            if (context.Location
+                .FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude) != null)
+                throw new Exception("409");
+
+            if (context.Location.FirstOrDefault(x => x.Id == id) == null)
+                throw new Exception("404");
+
+            context.Location.Update(location);
+            context.SaveChanges();
+
+            return location;
+        }
     }
 }
