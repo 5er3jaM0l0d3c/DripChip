@@ -48,5 +48,15 @@ namespace Services.Service
 
             return animalType;
         }
+
+        public void DeleteAnimalType(long id)
+        {
+            var animalType = context.AnimalType.FirstOrDefault(x => x.Id == id) ?? throw new Exception("404");
+
+            if (context.Animal_AnimalType.FirstOrDefault(x => x.AnimalType == animalType) != null)
+                throw new Exception("400");
+
+            context.AnimalType.Remove(animalType);
+        }
     }
 }

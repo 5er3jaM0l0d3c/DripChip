@@ -75,5 +75,27 @@ namespace DripChipAPI.Controllers
                 return StatusCode(400, ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpDelete("/animals/types/{typeId}")]
+        public IActionResult DeleteAnimalType(long typeId)
+        {
+            if (typeId <= 0)
+                return StatusCode(400, "typeId <= 0");
+
+            try
+            {
+                AnimalType.DeleteAnimalType(typeId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "400")
+                    return StatusCode(400, "Есть животные с типом с typeId");
+                if (ex.Message == "404")
+                    return StatusCode(404, "Тип животного с таким typeId не найден");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
