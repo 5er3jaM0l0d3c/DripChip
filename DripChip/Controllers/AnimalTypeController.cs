@@ -51,5 +51,29 @@ namespace DripChipAPI.Controllers
                 return StatusCode(400, ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPut("/animals/types/{typeId}")]
+        public IActionResult UpdateAnimalType(long typeId, [FromBody] AnimalType animalType)
+        {
+            if (typeId <= 0 || animalType.Type.IsNullOrEmpty())
+                return StatusCode(400);
+
+            AnimalType? result = new();
+
+            try
+            {
+                result = AnimalType.UpdateAnimalType(typeId, animalType);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "409")
+                    return StatusCode(409, "Тип животного с таким type уже существует");
+                if (ex.Message == "404")
+                    return StatusCode(404, "Тип животного с таким typeId не найден");
+                return StatusCode(400, ex.Message);
+            }
+        }
     }
 }

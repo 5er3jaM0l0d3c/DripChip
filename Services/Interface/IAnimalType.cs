@@ -11,5 +11,6 @@ namespace Services.Interface
     {
         public AnimalType? GetAnimalTypeInfo(long? id);
         public AnimalType? AddAnimalType(AnimalType animalType);
+        public AnimalType? UpdateAnimalType(long id, AnimalType animalType);
     }
 }
