@@ -57,6 +57,7 @@ namespace Services.Service
                 throw new Exception("400");
 
             context.AnimalType.Remove(animalType);
+            context.SaveChanges();
         }
     }
 }
