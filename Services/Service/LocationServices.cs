@@ -40,11 +40,11 @@ namespace Services.Service
         {
             location.Id = id;
 
-            if (context.Location
+            if (context.Location.AsNoTracking()
                 .FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude) != null)
                 throw new Exception("409");
 
-            if (context.Location.FirstOrDefault(x => x.Id == id) == null)
+            if (context.Location.AsNoTracking().FirstOrDefault(x => x.Id == id) == null)
                 throw new Exception("404");
 
             context.Location.Update(location);

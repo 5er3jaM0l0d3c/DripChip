@@ -39,7 +39,8 @@ namespace DripChipAPI.Controllers
         {
             if (location.Latitude == null || location.Latitude < -90 || location.Latitude > 90
                 || location.Longitude == null || location.Longitude < -180 || location.Longitude > 180)
-                return StatusCode(400);
+                return StatusCode(400, "pointId <= 0, latitude = " + location.Latitude + " latitude может быть [-90; 90]," +
+                    "                   longitude = " + location.Longitude + " longitude может быть [-180; 180]");
             Location? result = new();
             try
             {
@@ -61,7 +62,8 @@ namespace DripChipAPI.Controllers
         {
             if (pointId <= 0 || location.Latitude == null || location.Latitude < -90 || location.Latitude > 90
                 || location.Longitude == null || location.Longitude < -180 || location.Longitude > 180)
-                return StatusCode(400);
+                return StatusCode(400, "pointId <= 0, latitude = " + location.Latitude + " latitude может быть [-90; 90]," +
+                    "                   longitude = " + location.Longitude + " longitude может быть [-180; 180]");
 
             Location? result = new();
 
@@ -76,7 +78,7 @@ namespace DripChipAPI.Controllers
                     return StatusCode(404, "Точка локации с таким pointId = " + pointId + " не найдена");
                 if (ex.Message == "409")
                     return StatusCode(409, "Точка локации с такими latitude = " + location.Latitude + " и longitude = " + location.Longitude + " уже существует");
-            }
+            } 
 
             return StatusCode(400, "Неизвестная ошибка");
         }
