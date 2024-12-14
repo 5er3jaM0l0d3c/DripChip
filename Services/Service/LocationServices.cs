@@ -52,5 +52,18 @@ namespace Services.Service
 
             return location;
         }
+
+        public void DeleteLocation(long id)
+        {
+            var location = context.Location.FirstOrDefault(x => x.Id != id);
+            if (location == null)
+                throw new Exception("404");
+
+            if (context.Animal_Location.FirstOrDefault(x => x.LocationId == id) != null)
+                throw new Exception("400");
+
+            context.Location.Remove(location);
+            context.SaveChanges();
+        }
     }
 }

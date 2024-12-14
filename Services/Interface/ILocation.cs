@@ -12,5 +12,6 @@ namespace Services.Interface
         public Location? GetLocationInfo(long? id);
         public Location? AddLocation(Location location);
         public Location? UpdateLocation(long id, Location location);
+        public void DeleteLocation(long id);
     }
 }

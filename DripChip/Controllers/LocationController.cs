@@ -82,5 +82,28 @@ namespace DripChipAPI.Controllers
 
             return StatusCode(400, "Неизвестная ошибка");
         }
+
+        [Authorize]
+        [HttpDelete("/locations/{pointId}")]
+        public IActionResult DeleteLocation(long pointId)
+        {
+            if (pointId <= 0)
+                return StatusCode(400, "pointId <= 0");
+
+            try
+            {
+                Location.DeleteLocation(pointId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "400")
+                    return StatusCode(400, "Точка локации связана с животным");
+                if(ex.Message == "404")
+                    return StatusCode(404, "Точка локации с таким pointId = " +  pointId + " не найдена");
+                return StatusCode(400, ex.Message);
+            }
+
+        }
     }
 }
