@@ -55,7 +55,7 @@ namespace Services.Service
 
         public void DeleteLocation(long id)
         {
-            var location = context.Location.FirstOrDefault(x => x.Id != id);
+            var location = context.Location.FirstOrDefault(x => x.Id == id);
             if (location == null)
                 throw new Exception("404");
 
