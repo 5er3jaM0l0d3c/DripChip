@@ -3,6 +3,7 @@ using Entities;
 
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interface;
 using System;
@@ -130,6 +131,20 @@ namespace Services.Service
             account.Password = null;
 
             return account;
+        }
+
+        public void DeleteAccount(int id)
+        {
+            var account = context.Account.FirstOrDefault(x => x.Id == id);
+
+            if (account == null)
+                throw new Exception("403");
+            
+            if(context.Animal.FirstOrDefault(x => x.ChipperId == id) != null)
+                throw new Exception("400");
+
+            context.Account.Remove(account);
+            context.SaveChanges();
         }
     }
 }

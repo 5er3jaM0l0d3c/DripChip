@@ -1,0 +1,10 @@
+﻿@DripChip_HostAddress = https://localhost:7173
+
+@token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoibG9naW4iLCJQYXNzd29yZCI6InBhc3N3b3JkIiwiSWQiOiIyIiwiaXNzIjoiRHJpcENoaXBBUEkiLCJhdWQiOiJEcmlwQ2hpcENsaWVudCJ9.nZgIk6yHT99YdlJQ4Rq0ysnouhjcA9BdnbGPyf43-fk
+@token1 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiRW1haWxAIiwiUGFzc3dvcmQiOiIxMjM0NSIsIklkIjoiMSIsImlzcyI6IkRyaXBDaGlwQVBJIiwiYXVkIjoiRHJpcENoaXBDbGllbnQifQ.Sa2W8Vk3hGdioGs5MG1aumICKwYno1cGaSAR8a8Gk2E
+
+DELETE {{DripChip_HostAddress}}/accounts/1
+Accept: application/json
+Authorization: Bearer {{token1}}
+
+###

@@ -81,5 +81,21 @@ namespace DripChip.Controllers
 
             return StatusCode(400, "Неизвестная ошибка");
         }
+
+        [Authorize]
+        [HttpDelete("/accounts/{accountId}")]
+        public IActionResult DeleteAccount(int accountId)
+        {
+            if (accountId <= 0)
+                return StatusCode(400, "accountId = null,\naccountId <= 0");
+
+            var userId = User.FindFirst("Id");
+
+            if (userId != null && userId.Value != accountId.ToString())
+                return StatusCode(403, "Обновление не своего аккаунта");
+
+            Account.DeleteAccount(accountId);
+            return Ok();
+        }
     }
 }
