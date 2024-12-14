@@ -49,7 +49,7 @@ namespace DripChip.Controllers
         }
 
         [Authorize]
-        [HttpPut("accounts/{accountId}")]
+        [HttpPut("/accounts/{accountId}")]
         public IActionResult UpdateAccount(int accountId, [FromBody]Account account)
         {
             var userId = User.FindFirst("Id");

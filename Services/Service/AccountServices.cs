@@ -116,12 +116,15 @@ namespace Services.Service
         {
             account.Id = id;
 
-            if (context.Account.FirstOrDefault(x => x.Id == id) == null)
+            var acc = context.Account.FirstOrDefault(x => x.Id == id);
+
+            if (acc == null)
                 throw new Exception("403");
-            if (account.Email != null && context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
+            
+            if (acc.Email != account.Email && account.Email != null && context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
                 throw new Exception("409");
 
-            context.Account.Update(account);
+            context.Entry(acc).CurrentValues.SetValues(account);
             context.SaveChanges();
 
             account.Password = null;
