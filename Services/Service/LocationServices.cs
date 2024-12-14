@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,19 @@ namespace Services.Service
         public Location? GetLocationInfo(long? id)
         {
             return context.Location.FirstOrDefault(x => x.Id == id);
+        }
+
+        public Location? AddLocation(Location location)
+        {
+            if (context.Location.AsNoTracking()
+                .FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude) != null)
+                throw new Exception("409");
+
+            context.Location.Add(location);
+            context.SaveChanges();
+
+            return context.Location.FirstOrDefault(x => x.Longitude == location.Longitude && x.Latitude == location.Latitude);
+
         }
     }
 }

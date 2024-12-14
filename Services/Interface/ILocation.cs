@@ -10,5 +10,6 @@ namespace Services.Interface
     public interface ILocation
     {
         public Location? GetLocationInfo(long? id);
+        public Location? AddLocation(Location location);
     }
 }
