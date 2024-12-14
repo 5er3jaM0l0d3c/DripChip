@@ -20,5 +20,16 @@ namespace Services.Service
         {
             return context.AnimalType.FirstOrDefault(x => x.Id == id);
         }
+
+        public AnimalType? AddAnimalType(AnimalType animalType)
+        {
+            if (context.AnimalType.FirstOrDefault(x => x.Type == animalType.Type) != null)
+                throw new Exception("409");
+
+            context.AnimalType.Add(animalType);
+            context.SaveChanges();
+
+            return animalType;
+        }
     }
 }
