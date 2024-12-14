@@ -94,7 +94,17 @@ namespace DripChip.Controllers
             if (userId != null && userId.Value != accountId.ToString())
                 return StatusCode(403, "Обновление не своего аккаунта");
 
-            Account.DeleteAccount(accountId);
+            try
+            {
+                Account.DeleteAccount(accountId);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "400")
+                    return StatusCode(400, "Аккаунт связан с животным");
+                if (ex.Message == "403")
+                    return StatusCode(403, "Аккаунт с таким accountId = " + accountId + " не найден");
+            }
             return Ok();
         }
     }

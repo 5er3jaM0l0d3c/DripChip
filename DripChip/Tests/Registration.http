@@ -1,7 +1,7 @@
 @DripChip_HostAddress = https://localhost:7173
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiRW1haWxAIiwiUGFzc3dvcmQiOiIxMjM0NSIsImlzcyI6IkRyaXBDaGlwQVBJIiwiYXVkIjoiRHJpcENoaXBDbGllbnQifQ.xwtmY9iUzbYd-flu_XevpFNlg1VLx_lpx2PYut0j-Qo
 
-GET {{DripChip_HostAddress}}/auth/Email@/12345 #Для проверки авторизации
+GET {{DripChip_HostAddress}}/auth/ddddd/qwer #Для проверки авторизации
 Accept: application/json
 ###
 
@@ -9,10 +9,10 @@ POST {{DripChip_HostAddress}}/registration #200
 Content-Type: application/json
 Accept: application/json
 {
-  "FirstName": "forSearch",
-  "LastName": "testing",
-  "Email": "qwe@",
-  "Password": "testing"
+  "FirstName": "dddd",
+  "LastName": "dddd",
+  "Email": "ddddd",
+  "Password": "qwer"
 }
 
 ###

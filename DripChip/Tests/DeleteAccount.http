@@ -2,9 +2,10 @@
 
 @token2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoibG9naW4iLCJQYXNzd29yZCI6InBhc3N3b3JkIiwiSWQiOiIyIiwiaXNzIjoiRHJpcENoaXBBUEkiLCJhdWQiOiJEcmlwQ2hpcENsaWVudCJ9.nZgIk6yHT99YdlJQ4Rq0ysnouhjcA9BdnbGPyf43-fk
 @token1 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiRW1haWxAIiwiUGFzc3dvcmQiOiIxMjM0NSIsIklkIjoiMSIsImlzcyI6IkRyaXBDaGlwQVBJIiwiYXVkIjoiRHJpcENoaXBDbGllbnQifQ.Sa2W8Vk3hGdioGs5MG1aumICKwYno1cGaSAR8a8Gk2E
+@deleteToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiZGRkZGQiLCJQYXNzd29yZCI6InF3ZXIiLCJJZCI6IjUiLCJpc3MiOiJEcmlwQ2hpcEFQSSIsImF1ZCI6IkRyaXBDaGlwQ2xpZW50In0.ZWknObFwjJoNO6h0cubrruMaDD8svghaSz1oPHP5P3M
 
-DELETE {{DripChip_HostAddress}}/accounts/1
+DELETE {{DripChip_HostAddress}}/accounts/5
 Accept: application/json
-Authorization: Bearer {{token1}}
+Authorization: Bearer {{deleteToken}}
 
 ###

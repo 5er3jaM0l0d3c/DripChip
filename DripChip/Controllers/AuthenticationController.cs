@@ -25,7 +25,7 @@ namespace DripChip.Controllers
             return StatusCode(401, "Неверные авторизационные данные");
         }
 
-        [HttpPost]
+        [HttpPost("/registration")]
         public IActionResult Registration(Account account)
         {
             if (String.IsNullOrWhiteSpace(account.Password)
