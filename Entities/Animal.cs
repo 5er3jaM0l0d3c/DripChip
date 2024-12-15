@@ -22,16 +22,12 @@ public partial class Animal
 
     public DateTime? DeathDateTime { get; set; }
 
-    public string LifeStatus { get; set; } = null!;
+    public string? LifeStatus { get; set; } = null!;
 
     public string Gender { get; set; } = null!;
-
-    public virtual Account Chipper { get; set; } = null!;
-
-    public virtual Location ChippingLocation { get; set; } = null!;
 }
 public partial class Animal
 {
-    public long[]? AnimalTypes { get; set; } = null!;
-    public long[]? VisitedLocations { get; set; } = null!;
+    public long[]? AnimalTypes { get; set; }
+    public long[]? VisitedLocations { get; set; }
 }

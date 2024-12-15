@@ -33,9 +33,6 @@ public partial class DripChipContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .HasPostgresEnum("AnimalGender", new[] { "MALE", "FEMALE", "OTHER" })
-            .HasPostgresEnum("AnimalLifeStatus", new[] { "ALIVE", "DEAD" });
 
         modelBuilder.Entity<Account>(entity =>
         {

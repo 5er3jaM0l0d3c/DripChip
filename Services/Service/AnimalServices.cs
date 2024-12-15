@@ -173,20 +173,20 @@ namespace Services.Service
         private List<Animal> SearchByLifeStatus(string lifeStatus)
         {
             if(lifeStatus.ToLower() == "alive")
-                return context.Animal.Where(x => x.LifeStatus == AnimalLifeStatus.ALIVE.ToString()).ToList();
+                return context.Animal.Where(x => x.LifeStatus.Equals("alive", StringComparison.CurrentCultureIgnoreCase)).ToList();
             if (lifeStatus.ToLower() == "dead")
-                return context.Animal.Where(x => x.LifeStatus == AnimalLifeStatus.DEAD.ToString()).ToList();
+                return context.Animal.Where(x => x.LifeStatus.Equals("dead", StringComparison.CurrentCultureIgnoreCase)).ToList();
             return new List<Animal>();
         }
 
         private List<Animal> SearchByGender(string gender)
         {
             if (gender == "male")
-                return context.Animal.Where(x => x.Gender == AnimalGender.MALE.ToString()).ToList();
-            if (gender == "female")
-                return context.Animal.Where(x => x.Gender == AnimalGender.FEMALE.ToString()).ToList();
-            if (gender == "other")
-                return context.Animal.Where(x => x.Gender == AnimalGender.OTHER.ToString()).ToList();
+                return context.Animal.Where(x => x.Gender.Equals("male", StringComparison.CurrentCultureIgnoreCase)).ToList();
+            if (gender == "female")                      
+                return context.Animal.Where(x => x.Gender.Equals("female", StringComparison.CurrentCultureIgnoreCase)).ToList();
+            if (gender == "other")                       
+                return context.Animal.Where(x => x.Gender.Equals("other", StringComparison.CurrentCultureIgnoreCase)).ToList();
             return new List<Animal>();
         }
 
@@ -202,6 +202,8 @@ namespace Services.Service
             if(context.Location.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChippingLocationId) == null)
                 throw new Exception("404");
 
+            animal.LifeStatus = "ALIVE";
+            animal.Gender = animal.Gender.ToUpper();
             context.Animal.Add(animal);
 
             foreach (var typeId in animal.AnimalTypes)
@@ -213,11 +215,11 @@ namespace Services.Service
 
             context.SaveChanges();
 
-            animal = context.Animal.FirstOrDefault(x => x.Id == animal.Id);
-            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.Id).ToArray();
-            animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
+            var result = context.Animal.FirstOrDefault(x => x.Id == animal.Id);
+            result.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.Id).ToArray();
+            result.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
 
-            return animal;
+            return result;
 
         }
     }

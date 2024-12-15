@@ -75,13 +75,13 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                Animal.AddAnimal(animal);
+                result = Animal.AddAnimal(animal);
                 return new JsonResult(result);
             }
             catch (Exception ex)
             {
                 if (ex.Message == "404")
-                    return BadRequest();
+                    return StatusCode(404, "Тип животного не найден ИЛИ аккаунт с chipperId не найден ИЛИ точка локации с chippingLocationId не найдена");
                 return BadRequest(ex.Message);
             }
         }
