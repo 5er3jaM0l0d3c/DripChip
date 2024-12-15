@@ -173,20 +173,20 @@ namespace Services.Service
         private List<Animal> SearchByLifeStatus(string lifeStatus)
         {
             if(lifeStatus.ToLower() == "alive")
-                return context.Animal.Where(x => x.LifeStatus.Equals("alive", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                return context.Animal.Where(x => x.LifeStatus.ToLower() == lifeStatus.ToLower()).ToList();
             if (lifeStatus.ToLower() == "dead")
-                return context.Animal.Where(x => x.LifeStatus.Equals("dead", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                return context.Animal.Where(x => x.LifeStatus.ToLower() == lifeStatus.ToLower()).ToList();
             return new List<Animal>();
         }
 
         private List<Animal> SearchByGender(string gender)
         {
             if (gender == "male")
-                return context.Animal.Where(x => x.Gender.Equals("male", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                return context.Animal.Where(x => x.Gender.ToLower() == gender.ToLower()).ToList();
             if (gender == "female")                      
-                return context.Animal.Where(x => x.Gender.Equals("female", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                return context.Animal.Where(x => x.Gender.ToLower() == gender.ToLower()).ToList();
             if (gender == "other")                       
-                return context.Animal.Where(x => x.Gender.Equals("other", StringComparison.CurrentCultureIgnoreCase)).ToList();
+                return context.Animal.Where(x => x.Gender.ToLower() == gender.ToLower()).ToList();
             return new List<Animal>();
         }
 
