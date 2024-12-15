@@ -23,8 +23,8 @@ namespace Services.Service
 
             if (animal == null)
                 return null;
-
-            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToArray();
+                                                                                                           //x.Id
+            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToArray();//BUG
             animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToArray();
             
             return animal;
@@ -97,7 +97,7 @@ namespace Services.Service
             foreach (var animal in animals)
             {
                 animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
-                animal.AnimalTypes = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
+                animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
             }
             
 
@@ -188,6 +188,37 @@ namespace Services.Service
             if (gender == "other")
                 return context.Animal.Where(x => x.Gender == AnimalGender.OTHER.ToString()).ToList();
             return new List<Animal>();
+        }
+
+        public Animal AddAnimal(Animal animal)
+        {
+            foreach(var typeId in animal.AnimalTypes)
+                if(context.AnimalType.AsNoTracking().FirstOrDefault(x => x.Id == typeId) == null)
+                    throw new Exception("404");
+            
+            if(context.Account.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChipperId) == null)
+                throw new Exception("404");
+            
+            if(context.Location.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChippingLocationId) == null)
+                throw new Exception("404");
+
+            context.Animal.Add(animal);
+
+            foreach (var typeId in animal.AnimalTypes)
+                context.Animal_AnimalType.Add(new AnimalAnimalType 
+                {
+                    AnimalId = animal.Id,
+                    AnimalTypeId = typeId
+                });
+
+            context.SaveChanges();
+
+            animal = context.Animal.FirstOrDefault(x => x.Id == animal.Id);
+            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.Id).ToArray();
+            animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
+
+            return animal;
+
         }
     }
 }

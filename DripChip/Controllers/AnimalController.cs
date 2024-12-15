@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interface;
+using System.Reflection;
 using System.Text;
 
 namespace DripChipAPI.Controllers
@@ -47,11 +49,51 @@ namespace DripChipAPI.Controllers
                 || chippingLocationId != null && chippingLocationId <= 0
                 || lifeStatus != null && lifeStatus.ToLower() != "alive" && lifeStatus.ToLower() != "dead"
                 || gender != null && gender.ToLower() != "male" && gender.ToLower() != "female" && gender.ToLower() != "other")
-                return StatusCode(400);
+                return BadRequest();
 
             var result = Animal.SearchAnimal(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
 
             return new JsonResult(result);
+        }
+
+        [Authorize]
+        [HttpPost("/animals")]
+        public IActionResult AddAnimal([FromBody] Animal animal)
+        {
+            if (animal.AnimalTypes == null
+                || animal.AnimalTypes.Count() <= 0
+                || HaveNullOrNegativeElement(animal.AnimalTypes)
+                || animal.Weight == null || animal.Weight <= 0
+                || animal.Length == null || animal.Length <= 0
+                || animal.Height == null || animal.Height <= 0
+                || animal.Gender == null || (animal.Gender.ToLower() != "male" && animal.Gender.ToLower() != "female" && animal.Gender.ToLower() != "other")
+                || animal.ChipperId == null || animal.ChipperId <= 0
+                || animal.ChippingLocationId == null || animal.ChippingLocationId <= 0)
+                return BadRequest();
+
+            Animal result = new();
+
+            try
+            {
+                Animal.AddAnimal(animal);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "404")
+                    return BadRequest();
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private bool HaveNullOrNegativeElement(long[] array)
+        {
+            foreach(var item in array)
+            {
+                if (item == null || item <= 0)
+                    return true;
+            }
+            return false;
         }
     }
 }

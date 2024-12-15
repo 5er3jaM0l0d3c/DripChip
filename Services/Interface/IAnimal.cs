@@ -18,5 +18,6 @@ namespace Services.Interface
                                     string? gender,
                                     int from = 0,
                                     int size = 10);
+        public Animal AddAnimal(Animal animal);
     }
 }
