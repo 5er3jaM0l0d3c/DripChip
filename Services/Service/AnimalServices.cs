@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Services.Interface;
 using System;
@@ -221,6 +222,27 @@ namespace Services.Service
 
             return result;
 
+        }
+
+        public Animal? UpdateAnimal(Animal animal)
+        {
+            var oldAnimal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animal.Id);
+            if (oldAnimal == null
+                || context.Account.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChipperId) == null
+                || context.Location.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChippingLocationId) == null)
+                throw new Exception("404");
+
+            if (oldAnimal.LifeStatus == "DEAD" && animal.LifeStatus == "ALIVE"
+                || oldAnimal.VisitedLocations.FirstOrDefault() == animal.ChippingLocationId)
+                throw new Exception("400");
+
+            if(oldAnimal == null)
+
+            context.Animal.Update(animal);
+            context.SaveChanges();
+
+            return context.Animal.FirstOrDefault(x => x.Id == animal.Id);
+            
         }
     }
 }

@@ -95,5 +95,37 @@ namespace DripChipAPI.Controllers
             }
             return false;
         }
+
+        [Authorize]
+        [HttpPut("/animals/{animalId}")]
+        public IActionResult UpdateAnimal(long animalId, [FromBody] Animal animal)
+        {
+            if (animal.Weight == null || animal.Weight <= 0
+                || animal.Length == null || animal.Length <= 0
+                || animal.Height == null || animal.Height <= 0
+                || animal.Gender == null || (animal.Gender.ToLower() != "male" && animal.Gender.ToLower() != "female" && animal.Gender.ToLower() != "other")
+                || animal.LifeStatus != null || (animal.LifeStatus.ToLower() != "alive" && animal.LifeStatus.ToLower() != "dead")
+                || animal.ChipperId == null || animal.ChipperId <= 0
+                || animal.ChippingLocationId == null || animal.ChippingLocationId <= 0)
+                return BadRequest();
+
+            Animal? result = new();
+
+            try
+            {
+                animal.Id = animalId;
+                result = Animal.UpdateAnimal(animal);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "400")
+                    return BadRequest("Установка lifeStatus = \"ALIVE\" когда у животного lifeStatus = \"DEAD\" " +
+                        "ИЛИ новая точка чипирования совпадает с первой посещенной точкой локации");
+                if (ex.Message == "404")
+                    return StatusCode(404, "Животное с animalId не найдено ИЛИ аккаунт с chipperId не найден ИЛИ точка локации с chippingLocationId не найдена");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

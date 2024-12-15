@@ -19,5 +19,6 @@ namespace Services.Interface
                                     int from = 0,
                                     int size = 10);
         public Animal AddAnimal(Animal animal);
+        public Animal? UpdateAnimal(Animal animal);
     }
 }
