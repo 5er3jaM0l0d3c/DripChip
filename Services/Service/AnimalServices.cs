@@ -281,8 +281,6 @@ namespace Services.Service
             if (animal == null || animalType == null)
                 throw new Exception("404");           
 
-            animal.AnimalTypes.Add(typeId);
-
             context.Animal_AnimalType.Add(new AnimalAnimalType { AnimalId = animalId, AnimalTypeId = typeId });
             context.SaveChanges();
 
