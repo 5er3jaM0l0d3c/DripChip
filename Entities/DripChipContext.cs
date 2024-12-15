@@ -55,6 +55,9 @@ public partial class DripChipContext : DbContext
                 .HasColumnType("timestamp(0) without time zone");
             entity.Property(e => e.DeathDateTime).HasColumnType("timestamp(0) without time zone");
 
+            entity.Ignore(e => e.VisitedLocations);
+            entity.Ignore(e => e.AnimalTypes);
+
         });
 
         modelBuilder.Entity<AnimalAnimalType>(entity =>

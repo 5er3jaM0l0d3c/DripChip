@@ -32,6 +32,6 @@ public partial class Animal
 }
 public partial class Animal
 {
-    public long[] animalTypes { get; set; } = null!;
-    public long[] visitedLocations { get; set; } = null!;
+    public long[]? AnimalTypes { get; set; } = null!;
+    public long[]? VisitedLocations { get; set; } = null!;
 }

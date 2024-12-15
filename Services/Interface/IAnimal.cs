@@ -9,7 +9,7 @@ namespace Services.Interface
 {
     public interface IAnimal
     {
-        public object? GetAnimalInfo(long? animalId);
+        public Animal? GetAnimalInfo(long? animalId);
         public object? SearchAnimal(DateTime? startDateTime,
                                     DateTime? endDateTime,
                                     int? chipperId,

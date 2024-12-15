@@ -17,30 +17,17 @@ namespace Services.Service
             this.context = context;
         }
 
-        public object? GetAnimalInfo(long? animalId)
+        public Animal? GetAnimalInfo(long? animalId)
         {
             var animal = context.Animal.FirstOrDefault(x => x.Id == animalId);
 
             if (animal == null)
                 return null;
-            
-            var result = new
-            {
-                animal.Id,
-                animal.Weight,
-                animal.Length,
-                animal.Height,
-                animal.ChipperId,
-                animal.ChippingLocationId,
-                animal.ChippingDateTime,
-                animal.DeathDateTime,
-                animal.LifeStatus,
-                animal.Gender,
-                VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToList(),
-                AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList(),
-            };
 
-            return result;
+            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToArray();
+            animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToArray();
+            
+            return animal;
         }
 
         public object? SearchAnimal(DateTime? startDateTime,
