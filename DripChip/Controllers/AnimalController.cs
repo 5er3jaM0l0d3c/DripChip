@@ -138,11 +138,15 @@ namespace DripChipAPI.Controllers
             try
             {
                 Animal.DeleteAnimal(animalId);
+                return Ok();
             }
             catch (Exception ex)
             {
+                if (ex.Message == "400")
+                    return StatusCode(404, "Животное покинуло локацию чипирования, при этом есть другие посещенные точки");
                 if (ex.Message == "404")
                     return StatusCode(404, "Животное с animalId не найдено");
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -259,10 +259,15 @@ namespace Services.Service
 
         public void DeleteAnimal(long animalId)
         {
-            var animal = context.Animal.FirstOrDefault(x => x.Id == animalId);
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
 
             if(animal == null)
                 throw new Exception("404");
+
+            animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
+
+            if (animal.VisitedLocations.Count > 1)
+                throw new Exception("400");
 
             context.Animal.Remove(animal);
             context.SaveChanges();
