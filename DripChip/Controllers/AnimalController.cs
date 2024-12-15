@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +87,7 @@ namespace DripChipAPI.Controllers
             }
         }
 
-        private bool HaveNullOrNegativeElement(long[] array)
+        private bool HaveNullOrNegativeElement(List<long> array)
         {
             foreach(var item in array)
             {
@@ -98,13 +99,13 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpPut("/animals/{animalId}")]
-        public IActionResult UpdateAnimal(long animalId, [FromBody] Animal animal)
+        public IActionResult UpdateAnimal(long animalId, [FromBody] AnimalDTO animal)
         {
             if (animal.Weight == null || animal.Weight <= 0
                 || animal.Length == null || animal.Length <= 0
                 || animal.Height == null || animal.Height <= 0
                 || animal.Gender == null || (animal.Gender.ToLower() != "male" && animal.Gender.ToLower() != "female" && animal.Gender.ToLower() != "other")
-                || animal.LifeStatus != null || (animal.LifeStatus.ToLower() != "alive" && animal.LifeStatus.ToLower() != "dead")
+                || animal.LifeStatus == null || (animal.LifeStatus.ToLower() != "alive" && animal.LifeStatus.ToLower() != "dead")
                 || animal.ChipperId == null || animal.ChipperId <= 0
                 || animal.ChippingLocationId == null || animal.ChippingLocationId <= 0)
                 return BadRequest();
@@ -116,7 +117,7 @@ namespace DripChipAPI.Controllers
                 animal.Id = animalId;
                 result = Animal.UpdateAnimal(animal);
                 return new JsonResult(result);
-            }
+        }
             catch (Exception ex)
             {
                 if(ex.Message == "400")

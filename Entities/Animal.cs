@@ -28,6 +28,6 @@ public partial class Animal
 }
 public partial class Animal
 {
-    public long[]? AnimalTypes { get; set; }
-    public long[]? VisitedLocations { get; set; }
+    public List<long>? AnimalTypes { get; set; }
+    public List<long>? VisitedLocations { get; set; }
 }

@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Entities.DTO;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Services.Interface;
@@ -25,8 +26,8 @@ namespace Services.Service
             if (animal == null)
                 return null;
                                                                                                            //x.Id
-            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToArray();//BUG
-            animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToArray();
+            animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animalId).Select(x => x.LocationId).ToList();//BUG
+            animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
             
             return animal;
         }
@@ -54,8 +55,8 @@ namespace Services.Service
 
                 foreach (var animal in animals)
                 {
-                    animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
-                    animal.AnimalTypes = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
+                    animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToList();
+                    animal.AnimalTypes = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToList();
                 }
 
                 return animals;
@@ -97,8 +98,8 @@ namespace Services.Service
 
             foreach (var animal in animals)
             {
-                animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
-                animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
+                animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToList();
+                animal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToList();
             }
             
 
@@ -217,29 +218,40 @@ namespace Services.Service
             context.SaveChanges();
 
             var result = context.Animal.FirstOrDefault(x => x.Id == animal.Id);
-            result.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.Id).ToArray();
-            result.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
+            result.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.Id).ToList();
+            result.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToList();
 
             return result;
 
         }
 
-        public Animal? UpdateAnimal(Animal animal)
+        public Animal? UpdateAnimal(AnimalDTO animal)
         {
-            var oldAnimal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animal.Id);
+            var oldAnimal = context.Animal.FirstOrDefault(x => x.Id == animal.Id);
+
             if (oldAnimal == null
                 || context.Account.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChipperId) == null
                 || context.Location.AsNoTracking().FirstOrDefault(x => x.Id == animal.ChippingLocationId) == null)
                 throw new Exception("404");
 
+            oldAnimal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToList();
+
             if (oldAnimal.LifeStatus == "DEAD" && animal.LifeStatus == "ALIVE"
                 || oldAnimal.VisitedLocations.FirstOrDefault() == animal.ChippingLocationId)
                 throw new Exception("400");
 
-            if(oldAnimal == null)
+            oldAnimal.Weight = animal.Weight;
+            oldAnimal.Length = animal.Length;
+            oldAnimal.Height = animal.Height;
+            oldAnimal.Gender = animal.Gender.ToUpper();
+            oldAnimal.LifeStatus = animal.LifeStatus.ToUpper();
+            oldAnimal.ChipperId = animal.ChipperId;
+            oldAnimal.ChippingLocationId = animal.ChippingLocationId;
 
-            context.Animal.Update(animal);
+            context.Entry(oldAnimal).State = EntityState.Modified;
             context.SaveChanges();
+
+            oldAnimal.VisitedLocations = context.Animal_Location.Where(x => x.AnimalId == oldAnimal.Id).Select(x => x.Id).ToList();
 
             return context.Animal.FirstOrDefault(x => x.Id == animal.Id);
             
