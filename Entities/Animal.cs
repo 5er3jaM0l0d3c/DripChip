@@ -30,3 +30,8 @@ public partial class Animal
 
     public virtual Location ChippingLocation { get; set; } = null!;
 }
+public partial class Animal
+{
+    public long[] animalTypes { get; set; } = null!;
+    public long[] visitedLocations { get; set; } = null!;
+}
