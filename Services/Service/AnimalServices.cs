@@ -256,5 +256,16 @@ namespace Services.Service
             return context.Animal.FirstOrDefault(x => x.Id == animal.Id);
             
         }
+
+        public void DeleteAnimal(long animalId)
+        {
+            var animal = context.Animal.FirstOrDefault(x => x.Id == animalId);
+
+            if(animal == null)
+                throw new Exception("404");
+
+            context.Animal.Remove(animal);
+            context.SaveChanges();
+        }
     }
 }

@@ -117,7 +117,7 @@ namespace DripChipAPI.Controllers
                 animal.Id = animalId;
                 result = Animal.UpdateAnimal(animal);
                 return new JsonResult(result);
-        }
+            }
             catch (Exception ex)
             {
                 if(ex.Message == "400")
@@ -126,6 +126,23 @@ namespace DripChipAPI.Controllers
                 if (ex.Message == "404")
                     return StatusCode(404, "Животное с animalId не найдено ИЛИ аккаунт с chipperId не найден ИЛИ точка локации с chippingLocationId не найдена");
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("/animals/{animalId}")]
+        public IActionResult DeleteAnimal(long animalId)
+        {
+            if (animalId <= 0) return BadRequest("animalId <= 0");
+
+            try
+            {
+                Animal.DeleteAnimal(animalId);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "404")
+                    return StatusCode(404, "Животное с animalId не найдено");
             }
         }
     }
