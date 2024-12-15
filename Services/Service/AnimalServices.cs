@@ -30,7 +30,7 @@ namespace Services.Service
             return animal;
         }
 
-        public object? SearchAnimal(DateTime? startDateTime,
+        public  List<Animal>? SearchAnimal(DateTime? startDateTime,
                                     DateTime? endDateTime,
                                     int? chipperId,
                                     long? chippingLocationId,
@@ -39,70 +39,115 @@ namespace Services.Service
                                     int from = 0,
                                     int size = 10)
         {
-            var animals = context.Animal.ToList();
-            var visitedLocations = context.Animal_Location.ToList();
-            var animalTypes = context.Animal_AnimalType.ToList();
 
-            if (startDateTime != null)
+            List<Animal> animals = new();
+
+            if (startDateTime == null
+                && endDateTime == null
+                && chipperId == null
+                && chippingLocationId == null
+                && lifeStatus == null
+                && gender == null)
+            {
+                animals = context.Animal.Skip(from).Take(size).ToList();
+
+                foreach (var animal in animals)
+                {
+                    animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
+                    animal.AnimalTypes = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
+                }
+
+                return animals;
+            }
+
+            (animals, var filterNum) = GetFirstFilter(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender);
+
+            if (filterNum != 0 && startDateTime != null)
             {
                 animals = animals.Intersect(SearchByStartDateTime(startDateTime)).ToList();
             }
 
-            if (endDateTime != null)
+            if (filterNum != 1 && endDateTime != null)
             {
                 animals = animals.Intersect(SearchByEndDateTime(endDateTime)).ToList();
             }
 
-            if (chipperId != null)
+            if (filterNum != 2 && chipperId != null)
             {
                 animals = animals.Intersect(SearchByChipperId(chipperId)).ToList();
             }
 
-            if (chippingLocationId != null)
+            if (filterNum != 3 && chippingLocationId != null)
             {
                 animals = animals.Intersect(SearchByChippingLocationId(chippingLocationId)).ToList();
             }
 
-            if (lifeStatus != null)
+            if (filterNum != 4 && lifeStatus != null)
             {
                 animals = animals.Intersect(SearchByLifeStatus(lifeStatus)).ToList();
             }
 
-            if (gender != null)
+            if (filterNum != 5 && gender != null)
             {
                 animals = animals.Intersect(SearchByGender(gender)).ToList();
             }
 
             animals = animals.OrderBy(x => x.Id).ToList();
 
-            List<object> result = new();
-            for (int i = 0; i < animals.Count; i++) {
-                result.Add( new
-                {
-                    animals[i].Id,
-                    animals[i].Weight,
-                    animals[i].Length,
-                    animals[i].Height,
-                    animals[i].ChipperId,
-                    animals[i].ChippingLocationId,
-                    animals[i].ChippingDateTime,
-                    animals[i].DeathDateTime,
-                    animals[i].LifeStatus,
-                    animals[i].Gender,
-                    VisitedLocations = visitedLocations.Where(x => x.AnimalId == animals[i].Id).Select(x => x.LocationId).ToList(),
-                    AnimalTypes = animalTypes.Where(x => x.AnimalId == animals[i].Id).Select(x => x.AnimalTypeId).ToList(),
-                });
+            foreach (var animal in animals)
+            {
+                animal.AnimalTypes = context.Animal_AnimalType.Where(x => x.AnimalId == animal.Id).Select(x => x.AnimalTypeId).ToArray();
+                animal.AnimalTypes = context.Animal_Location.Where(x => x.AnimalId == animal.Id).Select(x => x.LocationId).ToArray();
             }
             
 
             try
             {
-                result.RemoveRange(0, from);
-                result.RemoveRange(size, result.Count - size);
+                animals.RemoveRange(0, from);
+                animals.RemoveRange(size, animals.Count - size);
             }
             catch { }
 
-            return result;
+            return animals;
+        }
+
+        private (List<Animal>, int) GetFirstFilter(DateTime? startDateTime,
+                                    DateTime? endDateTime,
+                                    int? chipperId,
+                                    long? chippingLocationId,
+                                    string? lifeStatus,
+                                    string? gender)
+        {
+            if (startDateTime != null)
+            {
+                return (SearchByStartDateTime(startDateTime).ToList(), 0);
+            }
+
+            if (endDateTime != null)
+            {
+                return (SearchByEndDateTime(endDateTime).ToList(), 1);
+            }
+
+            if (chipperId != null)
+            {
+                return (SearchByChipperId(chipperId).ToList(), 2);
+            }
+
+            if (chippingLocationId != null)
+            {
+                return (SearchByChippingLocationId(chippingLocationId).ToList(), 3);
+            }
+
+            if (lifeStatus != null)
+            {
+                return (SearchByLifeStatus(lifeStatus).ToList(), 4);
+            }
+
+            if (gender != null)
+            {
+                return (SearchByGender(gender).ToList(), 5);
+            }
+            throw new Exception();
         }
 
         private List<Animal> SearchByStartDateTime(DateTime? startDateTime)
