@@ -272,5 +272,24 @@ namespace Services.Service
             context.Animal.Remove(animal);
             context.SaveChanges();
         }
+
+        public Animal? AddAnimalTypeToAnimal(long animalId, long typeId)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+            var animalType = context.AnimalType.AsNoTracking().FirstOrDefault(y => y.Id == typeId);
+
+            if (animal == null || animalType == null)
+                throw new Exception("404");           
+
+            animal.AnimalTypes.Add(typeId);
+
+            context.Animal_AnimalType.Add(new AnimalAnimalType { AnimalId = animalId, AnimalTypeId = typeId });
+            context.SaveChanges();
+
+            animal.AnimalTypes = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
+            animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
+
+            return animal;
+        }
     }
 }

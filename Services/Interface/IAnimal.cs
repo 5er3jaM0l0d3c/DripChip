@@ -22,5 +22,6 @@ namespace Services.Interface
         public Animal AddAnimal(Animal animal);
         public Animal? UpdateAnimal(AnimalDTO animal);
         public void DeleteAnimal(long animalId);
+        public Animal? AddAnimalTypeToAnimal(long animalId, long typeId);
     }
 }

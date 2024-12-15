@@ -149,5 +149,27 @@ namespace DripChipAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPost("/animals/{animalId}/types/{typeId}")]
+        public IActionResult AddAnimalTypeToAnimal(long animalId, long typeId)
+        {
+            if (animalId <= 0 || typeId <= 0)
+                return BadRequest();
+
+            Animal? result = new();
+
+            try
+            {
+                result = Animal.AddAnimalTypeToAnimal(animalId, typeId);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "404")
+                    return StatusCode(404, "Животное с animalId = " + animalId + " не найдено ИЛИ тип животного с typeId = " +  typeId + " не надйен");
+                return BadRequest(ex);
+            }
+        }
     }
 }
