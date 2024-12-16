@@ -38,5 +38,28 @@ namespace DripChipAPI.Controllers
 
             return new JsonResult(result);
         }
+
+        [Authorize]
+        [HttpPost("/animals/{animalId}/locations/{pointId}")]
+        public IActionResult AddAnimalLocation(long animalId, long pointId)
+        {
+            if (animalId <= 0 || pointId <= 0) return BadRequest();
+
+            AnimalLocation? result = new();
+
+            try
+            {
+                result = Animal_Location.AddAnimalLocation(animalId, pointId);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "400")
+                    return BadRequest();
+                if(ex.Message == "404")
+                    return StatusCode(404);
+                return BadRequest(ex);
+            }
+        }
     }
 }

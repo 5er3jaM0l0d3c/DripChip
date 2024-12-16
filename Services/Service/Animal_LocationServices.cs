@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,22 @@ namespace Services.Service
         private List<AnimalLocation> SearchByEndDateTime(DateTime? endDateTime)
         {
             return context.Animal_Location.Where(x => x.DateTimeOfVisitLocationPoint <= endDateTime).ToList();
+        }
+
+        public AnimalLocation AddAnimalLocation(long animalId, long pointId)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+            var location = context.Location.AsNoTracking().FirstOrDefault(x => x.Id == pointId);
+
+            if (animal == null || location == null) throw new Exception("404");
+
+            if (animal.LifeStatus == "DEAD" || animal.ChippingLocationId == pointId) throw new Exception("400");
+
+            animal.ChippingLocationId = pointId;
+
+            context.Animal.Update(animal);
+
+            return context.Animal_Location.FirstOrDefault(x => x.AnimalId == animalId && x.LocationId == pointId);
         }
     }
 }

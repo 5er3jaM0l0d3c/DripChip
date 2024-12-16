@@ -10,5 +10,6 @@ namespace Services.Interface
     public interface IAnimal_Location
     {
         public List<AnimalLocation> GetAnimalLocationInfo(long animalId, DateTime? startDateTime, DateTime? endDateTime, int from, int size);
+        public AnimalLocation AddAnimalLocation(long animalId, long pointId);
     }
 }
