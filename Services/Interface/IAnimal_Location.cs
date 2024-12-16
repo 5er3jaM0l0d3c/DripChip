@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Services.Interface
     {
         public List<AnimalLocation> GetAnimalLocationInfo(long animalId, DateTime? startDateTime, DateTime? endDateTime, int from, int size);
         public AnimalLocation AddAnimalLocation(long animalId, long pointId);
+        public AnimalLocation UpdateAnimalLocation(long animalId, AnimalLocationDTO animalLocation);
     }
 }

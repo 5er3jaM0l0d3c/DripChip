@@ -1,9 +1,11 @@
 ﻿using Entities;
+using Entities.DTO;
 using Microsoft.EntityFrameworkCore;
 using Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,6 +72,33 @@ namespace Services.Service
             context.Animal.Update(animal);
 
             return context.Animal_Location.FirstOrDefault(x => x.AnimalId == animalId && x.LocationId == pointId);
+        }
+
+        public AnimalLocation UpdateAnimalLocation(long animalId, AnimalLocationDTO animalLocation)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+            var animallocation = context.Animal_Location.AsNoTracking().FirstOrDefault(x => x.Id == animalLocation.VisitedLocationPointId);
+            var location = context.Location.AsNoTracking().FirstOrDefault(x => x.Id == animalLocation.LocationPointId);
+
+            if (animal == null 
+                || animallocation == null 
+                || location == null 
+                || animallocation.AnimalId != animalId) throw new Exception("404");
+
+            var animalVisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).ToList();
+
+            if(animalVisitedLocations.FirstOrDefault(x => x.Id == animalLocation.VisitedLocationPointId).LocationId == animalVisitedLocations.ElementAt(animalVisitedLocations.IndexOf(animallocation)+1).LocationId
+                || animalVisitedLocations.FirstOrDefault(x => x.Id == animalLocation.VisitedLocationPointId).LocationId == animalVisitedLocations.ElementAt(animalVisitedLocations.IndexOf(animallocation) - 1).LocationId)
+            {
+                throw new Exception("400");
+            }
+
+            animallocation.LocationId = animalLocation.LocationPointId;
+
+            context.Animal_Location.Update(animallocation);
+            context.SaveChanges();
+
+            return animallocation;
         }
     }
 }

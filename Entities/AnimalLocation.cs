@@ -12,8 +12,4 @@ public partial class AnimalLocation
     public long Id { get; set; }
 
     public DateTime DateTimeOfVisitLocationPoint { get; set; }
-
-    public virtual Animal Animal { get; set; } = null!;
-
-    public virtual Location Location { get; set; } = null!;
 }

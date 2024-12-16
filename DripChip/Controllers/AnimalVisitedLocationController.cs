@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,29 @@ namespace DripChipAPI.Controllers
                     return BadRequest();
                 if(ex.Message == "404")
                     return StatusCode(404);
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("/animals/{animalId}/locations")]
+        public IActionResult UpdateAnimalLocation(long animalId, [FromBody]AnimalLocationDTO animalLocation)
+        {
+            if(animalId <= 0 || animalLocation.LocationPointId <= 0 || animalLocation.VisitedLocationPointId <= 0) return BadRequest();
+
+            AnimalLocation result = new();
+
+            try
+            {
+                result = Animal_Location.UpdateAnimalLocation(animalId, animalLocation);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "404")
+                    return StatusCode(404);
+                if(ex.Message == "400")
+                    return BadRequest();
                 return BadRequest(ex);
             }
         }
