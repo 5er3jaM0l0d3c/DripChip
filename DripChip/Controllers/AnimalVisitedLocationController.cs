@@ -88,13 +88,13 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpDelete("/animals/{animalId}/locations/{visitedPointId}")]
-        public IActionResult DeleteAnimalLocation(long animalId, long locationId)
+        public IActionResult DeleteAnimalLocation(long animalId, long visitedPointId)
         {
-            if (animalId <= 0 || locationId <= 0) return BadRequest();
+            if (animalId <= 0 || visitedPointId <= 0) return BadRequest();
 
             try
             {
-                Animal_Location.DeleteAnimalLocation(animalId, locationId);
+                Animal_Location.DeleteAnimalLocation(animalId, visitedPointId);
                 return Ok();
             }
             catch (Exception ex)
