@@ -259,11 +259,7 @@ namespace Services.Service
 
         public void DeleteAnimal(long animalId)
         {
-            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
-
-            if(animal == null)
-                throw new Exception("404");
-
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId) ?? throw new Exception("404");
             animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
 
             if (animal.VisitedLocations.Count > 1)
@@ -286,6 +282,33 @@ namespace Services.Service
 
             animal.AnimalTypes = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
             animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
+
+            return animal;
+        }
+
+        public Animal? UpdateAnimalTypeToAnimal(long animalId, NewOldAnimalTypeDTO types)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+
+            if (animal == null
+                || context.AnimalType.FirstOrDefault(x => x.Id == types.OldTypeId) == null
+                || context.AnimalType.FirstOrDefault(x => x.Id == types.NewTypeId) == null
+                || context.Animal_AnimalType.FirstOrDefault(x => x.AnimalTypeId == types.NewTypeId && x.AnimalId == animalId) == null) throw new Exception("404");
+
+            animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
+            var Types = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
+
+            if (Types.Contains(types.NewTypeId)
+                || Types.Contains(types.OldTypeId) && Types.Contains(types.NewTypeId))
+                throw new Exception("409");
+
+            var oldT = context.Animal_AnimalType.FirstOrDefault(x => x.AnimalId == animalId && x.AnimalTypeId == types.OldTypeId);
+            var newT = context.Animal_AnimalType.FirstOrDefault(x => x.AnimalId == animalId && x.AnimalTypeId == types.NewTypeId);
+
+            context.Animal_AnimalType.Remove(oldT);
+            context.Animal_AnimalType.Remove(newT);
+
+            context.SaveChanges();
 
             return animal;
         }

@@ -89,7 +89,7 @@ namespace DripChipAPI.Controllers
 
         private bool HaveNullOrNegativeElement(List<long> array)
         {
-            foreach(var item in array)
+            foreach (var item in array)
             {
                 if (item == null || item <= 0)
                     return true;
@@ -120,7 +120,7 @@ namespace DripChipAPI.Controllers
             }
             catch (Exception ex)
             {
-                if(ex.Message == "400")
+                if (ex.Message == "400")
                     return BadRequest("Установка lifeStatus = \"ALIVE\" когда у животного lifeStatus = \"DEAD\" " +
                         "ИЛИ новая точка чипирования совпадает с первой посещенной точкой локации");
                 if (ex.Message == "404")
@@ -166,8 +166,33 @@ namespace DripChipAPI.Controllers
             }
             catch (Exception ex)
             {
-                if(ex.Message == "404")
-                    return StatusCode(404, "Животное с animalId = " + animalId + " не найдено ИЛИ тип животного с typeId = " +  typeId + " не надйен");
+                if (ex.Message == "404")
+                    return StatusCode(404, "Животное с animalId = " + animalId + " не найдено ИЛИ тип животного с typeId = " + typeId + " не надйен");
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("/animal/{animalId}/types")]
+        public IActionResult UpdateAnimalTypeToAnimal(long animalId, NewOldAnimalTypeDTO types)
+        {
+            if (types.OldTypeId <= 0 ||
+                types.NewTypeId <= 0 ||
+                animalId <= 0) return BadRequest();
+
+            Animal? result = new();
+
+            try
+            {
+                result = Animal.UpdateAnimalTypeToAnimal(animalId, types);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "404")
+                    return StatusCode(404);
+                if (ex.Message == "409")
+                    return StatusCode(409);
                 return BadRequest(ex);
             }
         }
