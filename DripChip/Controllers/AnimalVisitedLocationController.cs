@@ -85,5 +85,24 @@ namespace DripChipAPI.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [Authorize]
+        [HttpDelete("/animals/{animalId}/locations/{visitedPointId}")]
+        public IActionResult DeleteAnimalLocation(long animalId, long locationId)
+        {
+            if (animalId <= 0 || locationId <= 0) return BadRequest();
+
+            try
+            {
+                Animal_Location.DeleteAnimalLocation(animalId, locationId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "404")
+                    return NotFound();
+                return BadRequest(ex);
+            }
+        }
     }
 }

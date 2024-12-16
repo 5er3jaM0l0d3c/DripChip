@@ -13,5 +13,6 @@ namespace Services.Interface
         public List<AnimalLocation> GetAnimalLocationInfo(long animalId, DateTime? startDateTime, DateTime? endDateTime, int from, int size);
         public AnimalLocation AddAnimalLocation(long animalId, long pointId);
         public AnimalLocation UpdateAnimalLocation(long animalId, AnimalLocationDTO animalLocation);
+        public void DeleteAnimalLocation(long animalId, long visitedPointId);
     }
 }

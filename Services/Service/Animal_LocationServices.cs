@@ -95,5 +95,18 @@ namespace Services.Service
 
             return animallocation;
         }
+
+        public void DeleteAnimalLocation(long animalId, long visitedPointId)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+            var animallocation = context.Animal_Location.AsNoTracking().FirstOrDefault(x => x.Id == visitedPointId);
+
+            if (animal == null
+                || animallocation == null
+                || animallocation.AnimalId != animalId) throw new Exception("404");
+
+            context.Animal_Location.Remove(animallocation);
+            context.SaveChanges();
+        }
     }
 }
