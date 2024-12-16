@@ -196,5 +196,28 @@ namespace DripChipAPI.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [Authorize]
+        [HttpDelete("/animals/{animalId}/types/{typeId}")]
+        public IActionResult DeleteAnimalTypeToAnimal(long animalId, long typeId)
+        {
+            if (animalId <= 0 || typeId <= 0) return BadRequest("animalId <= 0 ИЛИ typeId <= 0");
+
+            Animal? result = new();
+
+            try
+            {
+                result = Animal.DeleteAnimalTypeToAnimal(animalId, typeId);
+                return new JsonResult(result);
+            }
+            catch (Exception ex)
+            {
+                if(ex.Message == "400")
+                    return BadRequest("У животного только один тип и это тип с typeId");
+                if (ex.Message == "404")
+                    return StatusCode(404);
+                return BadRequest(ex);
+            }
+        }
     }
 }

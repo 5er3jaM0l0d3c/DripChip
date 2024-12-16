@@ -314,5 +314,24 @@ namespace Services.Service
 
             return animal;
         }
+
+        public Animal? DeleteAnimalTypeToAnimal(long animalId, long typeId)
+        {
+            var animal = context.Animal.AsNoTracking().FirstOrDefault(x => x.Id == animalId);
+            var types = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
+
+            if(animal == null || context.AnimalType.AsNoTracking().FirstOrDefault(x => x.Id == animalId) == null || !types.Contains(typeId)) throw new Exception("404");
+
+            if(types.Count == 1) throw new Exception("400");
+
+            context.Animal_AnimalType.Remove(new AnimalAnimalType { AnimalId = animalId, AnimalTypeId = typeId });
+            context.SaveChanges();
+
+            animal.AnimalTypes = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
+            animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
+
+            return animal;
+
+        }
     }
 }
