@@ -293,7 +293,7 @@ namespace Services.Service
             if (animal == null
                 || context.AnimalType.FirstOrDefault(x => x.Id == types.OldTypeId) == null
                 || context.AnimalType.FirstOrDefault(x => x.Id == types.NewTypeId) == null
-                || context.Animal_AnimalType.FirstOrDefault(x => x.AnimalTypeId == types.NewTypeId && x.AnimalId == animalId) == null) throw new Exception("404");
+                || context.Animal_AnimalType.FirstOrDefault(x => x.AnimalTypeId == types.OldTypeId && x.AnimalId == animalId) == null) throw new Exception("404");
 
             animal.VisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.Id).ToList();
             var Types = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
@@ -303,12 +303,14 @@ namespace Services.Service
                 throw new Exception("409");
 
             var oldT = context.Animal_AnimalType.FirstOrDefault(x => x.AnimalId == animalId && x.AnimalTypeId == types.OldTypeId);
-            var newT = context.Animal_AnimalType.FirstOrDefault(x => x.AnimalId == animalId && x.AnimalTypeId == types.NewTypeId);
+            var newT = new AnimalAnimalType { AnimalId = animalId, AnimalTypeId = types.NewTypeId };
 
             context.Animal_AnimalType.Remove(oldT);
-            context.Animal_AnimalType.Remove(newT);
+            context.Animal_AnimalType.Add(newT);
 
             context.SaveChanges();
+
+            animal.AnimalTypes = context.Animal_AnimalType.AsNoTracking().Where(x => x.AnimalId == animalId).Select(x => x.AnimalTypeId).ToList();
 
             return animal;
         }

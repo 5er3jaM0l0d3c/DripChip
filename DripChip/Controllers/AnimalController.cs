@@ -173,8 +173,8 @@ namespace DripChipAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut("/animal/{animalId}/types")]
-        public IActionResult UpdateAnimalTypeToAnimal(long animalId, NewOldAnimalTypeDTO types)
+        [HttpPut("/animals/{animalId}/types")]
+        public IActionResult UpdateAnimalTypeToAnimal(long animalId, [FromBody] NewOldAnimalTypeDTO types)
         {
             if (types.OldTypeId <= 0 ||
                 types.NewTypeId <= 0 ||
