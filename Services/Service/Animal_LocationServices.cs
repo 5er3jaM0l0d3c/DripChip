@@ -87,11 +87,6 @@ namespace Services.Service
 
             var animalVisitedLocations = context.Animal_Location.AsNoTracking().Where(x => x.AnimalId == animalId).ToList();
 
-            if(animalVisitedLocations.FirstOrDefault(x => x.Id == animalLocation.VisitedLocationPointId).LocationId == animalVisitedLocations.ElementAt(animalVisitedLocations.IndexOf(animallocation)+1).LocationId
-                || animalVisitedLocations.FirstOrDefault(x => x.Id == animalLocation.VisitedLocationPointId).LocationId == animalVisitedLocations.ElementAt(animalVisitedLocations.IndexOf(animallocation) - 1).LocationId)
-            {
-                throw new Exception("400");
-            }
 
             animallocation.LocationId = animalLocation.LocationPointId;
 
