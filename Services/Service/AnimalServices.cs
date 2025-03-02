@@ -2,7 +2,7 @@
 using Entities.DTO;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -333,6 +333,31 @@ namespace Services.Service
 
             return animal;
 
+        }
+
+        public Animal? Get(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Animal Update(long id, Animal entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Animal Add(Animal entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Animal> Search(Dictionary<string, object> filters)
+        {
+            throw new NotImplementedException();
         }
     }
 }

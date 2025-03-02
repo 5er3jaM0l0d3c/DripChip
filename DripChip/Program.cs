@@ -2,8 +2,10 @@ using DripChip;
 using Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Services.Interface;
+using Services;
+using Services.Interface.HighLevel;
 using Services.Service;
+using Services.Service.Mid;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddDbContext<DripChipContext>(option => option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IAccount, AccountServices>();
+builder.Services.AddScoped<IAccount, AccountDB>();
+builder.Services.AddScoped<IAccount, AccountLocal>();
 builder.Services.AddScoped<IAnimal, AnimalServices>();
 builder.Services.AddScoped<IAnimalType, AnimalTypeServices>();
 builder.Services.AddScoped<ILocation, LocationServices>();

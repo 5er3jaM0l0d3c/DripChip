@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using Services.Service;
 
 namespace DripChipAPI.Controllers
@@ -19,14 +19,14 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpGet("/locations/{pointId}")]
-        public IActionResult GetLocationInfo(long? pointId)
+        public IActionResult GetLocationInfo(long pointId)
         {
-            if (pointId == null || pointId <= 0)
+            if (pointId <= 0)
             {
                 return StatusCode(400, "pointId = null,\npointId <= 0");
             }
 
-            var result = Location.GetLocationInfo(pointId);
+            var result = Location.Get(pointId);
 
             if (result == null)
                 return StatusCode(404, "Точка локации с таким pointId = " + pointId + " не найдена");
@@ -44,7 +44,7 @@ namespace DripChipAPI.Controllers
             Location? result = new();
             try
             {
-                result = Location.AddLocation(location);
+                result = Location.Add(location);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                result = Location.UpdateLocation(pointId, location);
+                result = Location.Update(pointId, location);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                Location.DeleteLocation(pointId);
+                Location.Delete(pointId);
                 return Ok();
             }
             catch (Exception ex)

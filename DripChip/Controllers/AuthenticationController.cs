@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Services.Interface;
+using Services.Interface.HighLevel;
 
 namespace DripChip.Controllers
 {
@@ -41,7 +41,7 @@ namespace DripChip.Controllers
 
             try
             {
-                acc = Account.Registration(account);
+                acc = Account.Add(account);
             }
             catch (Exception ex)
             {

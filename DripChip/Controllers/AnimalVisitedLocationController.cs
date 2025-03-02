@@ -3,7 +3,7 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interface;
+using Services.Interface.HighLevel;
 
 namespace DripChipAPI.Controllers
 {
@@ -29,7 +29,7 @@ namespace DripChipAPI.Controllers
             List<AnimalLocation> result = new();
             try
             {
-                result = Animal_Location.GetAnimalLocationInfo(animalId, startDateTime, endDateTime, from, size);
+                //result = Animal_Location.Search(animalId, startDateTime, endDateTime, from, size);
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@ namespace DripChipAPI.Controllers
                     return StatusCode(404, "Животное с animalId = " + animalId + " не найдено");
             }
 
-            return new JsonResult(result);
+            return new JsonResult(2);
         }
 
         [Authorize]
@@ -50,7 +50,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                result = Animal_Location.AddAnimalLocation(animalId, pointId);
+               // result = Animal_Location.AddAnimalLocation(animalId, pointId);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                result = Animal_Location.UpdateAnimalLocation(animalId, animalLocation);
+                //result = Animal_Location.UpdateAnimalLocation(animalId, animalLocation);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -94,7 +94,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                Animal_Location.DeleteAnimalLocation(animalId, visitedPointId);
+                //Animal_Location.Delete(animalId, visitedPointId);
                 return Ok();
             }
             catch (Exception ex)

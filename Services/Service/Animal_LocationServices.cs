@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Entities.DTO;
 using Microsoft.EntityFrameworkCore;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +107,26 @@ namespace Services.Service
 
             context.Animal_Location.Remove(animallocation);
             context.SaveChanges();
+        }
+
+        public AnimalLocation Add(AnimalLocation entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AnimalLocation Update(long id, AnimalLocation entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<AnimalLocation> Search(Dictionary<string, object> filters)
+        {
+            throw new NotImplementedException();
         }
     }
 }

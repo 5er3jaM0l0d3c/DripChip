@@ -1,6 +1,6 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +58,26 @@ namespace Services.Service
 
             context.AnimalType.Remove(animalType);
             context.SaveChanges();
+        }
+
+        public AnimalType? Get(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AnimalType Update(long id, AnimalType entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AnimalType Add(AnimalType entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

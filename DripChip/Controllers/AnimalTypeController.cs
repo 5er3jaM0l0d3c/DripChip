@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Services.Interface;
+using Services.Interface.HighLevel;
 
 namespace DripChipAPI.Controllers
 {
@@ -19,12 +19,12 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpGet("/animals/types/{typeId}")]
-        public IActionResult GetAnimalTypeInfo(int? typeId)
+        public IActionResult GetAnimalTypeInfo(int typeId)
         {
-            if (typeId == null || typeId <= 0)
+            if (typeId <= 0)
                 return StatusCode(400, "typeId = null,\ntypeId <= 0");
 
-            var result = AnimalType.GetAnimalTypeInfo(typeId);
+            var result = AnimalType.Get(typeId);
 
             if (result == null)
                 return StatusCode(404, "Тип животно с таким typeId = " + typeId + " не найден");
@@ -41,7 +41,7 @@ namespace DripChipAPI.Controllers
             AnimalType? result = new();
             try
             {
-                result = AnimalType.AddAnimalType(animalType);
+                result = AnimalType.Add(animalType);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                result = AnimalType.UpdateAnimalType(typeId, animalType);
+                result = AnimalType.Update(typeId, animalType);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -85,7 +85,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                AnimalType.DeleteAnimalType(typeId);
+                AnimalType.Delete(typeId);
                 return Ok();
             }
             catch (Exception ex)

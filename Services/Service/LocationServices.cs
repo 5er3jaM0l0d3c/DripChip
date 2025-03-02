@@ -1,6 +1,6 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +64,26 @@ namespace Services.Service
 
             context.Location.Remove(location);
             context.SaveChanges();
+        }
+
+        public Location? Get(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Location Update(long id, Location entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Location Add(Location entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(long id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

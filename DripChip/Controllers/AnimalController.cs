@@ -3,7 +3,7 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System.Reflection;
 using System.Text;
 
@@ -21,12 +21,12 @@ namespace DripChipAPI.Controllers
 
         [Authorize]
         [HttpGet("/animals/{animalId}")]
-        public IActionResult GetAnimalInfo(long? animalId)
+        public IActionResult GetAnimalInfo(long animalId)
         {
-            if (animalId == null || animalId <= 0)
-                return StatusCode(400, "animalId = null\nanimalId <= 0");
+            if (animalId <= 0)
+                return StatusCode(400, "animalId <= 0");
 
-            var animal = Animal.GetAnimalInfo(animalId);
+            var animal = Animal.Get(animalId);
 
             if (animal == null)
                 return StatusCode(404, "Животное с animalId = " + animalId + " не найдено");
@@ -52,9 +52,9 @@ namespace DripChipAPI.Controllers
                 || gender != null && gender.ToLower() != "male" && gender.ToLower() != "female" && gender.ToLower() != "other")
                 return BadRequest();
 
-            var result = Animal.SearchAnimal(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
+            //var result = Animal.Search(startDateTime, endDateTime, chipperId, chippingLocationId, lifeStatus, gender, from, size);
 
-            return new JsonResult(result);
+            return new JsonResult(9);
         }
 
         [Authorize]
@@ -76,7 +76,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                result = Animal.AddAnimal(animal);
+                result = Animal.Add(animal);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -115,7 +115,7 @@ namespace DripChipAPI.Controllers
             try
             {
                 animal.Id = animalId;
-                result = Animal.UpdateAnimal(animal);
+                result = Animal.Update(animalId, result);
                 return new JsonResult(result);
             }
             catch (Exception ex)
@@ -137,7 +137,7 @@ namespace DripChipAPI.Controllers
 
             try
             {
-                Animal.DeleteAnimal(animalId);
+                Animal.Delete(animalId);
                 return Ok();
             }
             catch (Exception ex)

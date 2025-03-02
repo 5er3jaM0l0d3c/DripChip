@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Services.Interface;
+using Services.Interface.HighLevel;
 
 namespace DripChip.Controllers
 {
@@ -24,7 +24,7 @@ namespace DripChip.Controllers
             if (accountId == null || accountId <= 0)
                 return StatusCode(400, "accountId = null,\naccountId <=0");
             
-            Account? account = Account.GetAccountInfo(accountId);
+            Account? account = Account.Get(accountId);
             if (account != null)
             {
                 account.Password = null;
@@ -43,9 +43,9 @@ namespace DripChip.Controllers
         {
             if (from < 0)
                 return StatusCode(400, "from < 0");
-            List<Account> accounts = Account.Search(firstName, lastName, email, from, size);
+            //List<Account> accounts = Account.Search(firstName, lastName, email, from, size);
 
-            return new JsonResult(accounts);
+            return new JsonResult(1);
         }
 
         [Authorize]
@@ -67,7 +67,7 @@ namespace DripChip.Controllers
 
             try
             {
-                result = Account.UpdateAccount(accountId, account);
+                result = Account.Update(accountId, account);
 
                 return new JsonResult(result);
             }
@@ -96,7 +96,7 @@ namespace DripChip.Controllers
 
             try
             {
-                Account.DeleteAccount(accountId);
+                Account.Delete(accountId);
             }
             catch (Exception ex)
             {

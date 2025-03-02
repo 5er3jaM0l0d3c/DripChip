@@ -1,11 +1,11 @@
-﻿using DripChip;
+﻿
 using Entities;
 
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Services.Interface;
+using Services.Interface.HighLevel;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,135 +16,38 @@ using System.Threading.Tasks;
 
 namespace Services.Service
 {
-    public class AccountServices : IAccount
+    public class AccountServices
     {
-        private DripChipContext context { get; set; }
-        public AccountServices(DripChipContext context)
+        private readonly IAccount account;
+
+        public AccountServices(IAccount account)
         {
-            this.context = context;
+            this.account = account;
         }
 
-        public Account? Registration(Account account)
+        public Account Registration(Account account)
         {
-            if (context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
-            {
-                throw new Exception("409");
-            }
-
-            context.Account.Add(account);
-            context.SaveChanges();
-
-            Account? acc = context.Account.FirstOrDefault(x => x.Email == account.Email && x.Password == account.Password);
-
-            if (acc != null)
-            {
-                acc.Password = null;
-                return acc;
-            }
-            return null;
+            return this.account.Add(account);
         }
 
-        public Account? GetAccountInfo(int id)
+        public Account? GetAccount(int id)
         {
-            var account = context.Account.FirstOrDefault(x => x.Id == id);
-
-            return account;
+            return account.Get(id);
         }
 
-        public string? Auth(string login, string password)
+        public List<Account> SearchAccount(Dictionary<string, object> filters)
         {
-            var acc = context.Account.FirstOrDefault(x => x.Email == login && x.Password == password);
-            
-            if(acc != null)
-            {
-                var claims = new List<Claim> { new Claim("Name", login), new Claim("Password", password), new Claim("Id", acc.Id.ToString()) };
-                var jwt = new JwtSecurityToken(
-                        issuer: AuthenticationOptions.ISSUER,
-                        audience: AuthenticationOptions.AUDIENCE,
-                claims: claims,
-                signingCredentials: new SigningCredentials(AuthenticationOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-                return new JwtSecurityTokenHandler().WriteToken(jwt);
-            }
-            return null;
-        }
-
-        public List<Account> Search(string? firstName, string? lastName, string? email, int from = 0, int size = 10)
-        {
-            List<Account> accounts = context.Account.ToList();
-
-            if (firstName != null)
-            {
-                accounts = accounts.Intersect(SearchByFirstName(firstName)).ToList();
-            }
-
-            if (lastName != null)
-            {
-                accounts = accounts.Intersect(SearchByLastName(lastName)).ToList();
-            }
-
-            if (email != null)
-            {
-                accounts = accounts.Intersect(SearchByEmail(email)).ToList();
-            }
-
-            try
-            {
-                accounts.RemoveRange(0, from);
-                accounts.RemoveRange(size, accounts.Count - size);
-            }
-            catch { }
-
-            return accounts;
-        }
-
-        private List<Account> SearchByFirstName(string firstName)
-        {
-            return context.Account.Where(x => x.FirstName.ToLower().Contains(firstName.ToLower())).ToList();
-        }
-
-        private List<Account> SearchByLastName(string lastName)
-        {
-            return context.Account.Where(x => x.LastName.ToLower().Contains(lastName.ToLower())).ToList();
-        }
-
-        private List<Account> SearchByEmail(string email) 
-        {
-            return context.Account.Where(x => x.Email.ToLower().Contains(email.ToLower())).ToList();
+            return this.account.Search(filters);
         }
 
         public Account UpdateAccount(int id, Account account)
         {
-            account.Id = id;
-
-            var acc = context.Account.FirstOrDefault(x => x.Id == id);
-
-            if (acc == null)
-                throw new Exception("403");
-            
-            if (acc.Email != account.Email && account.Email != null && context.Account.FirstOrDefault(x => x.Email == account.Email) != null)
-                throw new Exception("409");
-
-            context.Entry(acc).CurrentValues.SetValues(account);
-            context.SaveChanges();
-
-            account.Password = null;
-
-            return account;
+            return this.account.Update(id, account);
         }
 
         public void DeleteAccount(int id)
         {
-            var account = context.Account.FirstOrDefault(x => x.Id == id);
-
-            if (account == null)
-                throw new Exception("403");
-            
-            if(context.Animal.FirstOrDefault(x => x.ChipperId == id) != null)
-                throw new Exception("400");
-
-            context.Account.Remove(account);
-            context.SaveChanges();
+            this.account.Delete(id);
         }
     }
 }
