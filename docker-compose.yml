@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: DripChip
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "313818"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  dripchipapi:
+    image: ${DOCKER_REGISTRY-}dripchipapi
+    build:
+      context: .
+      dockerfile: DripChip/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

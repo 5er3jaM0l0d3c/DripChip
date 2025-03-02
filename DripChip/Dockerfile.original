@@ -1,0 +1,27 @@
+# Используем базовый образ .NET SDK для сборки приложения
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Копируем файлы проекта
+COPY . .
+
+# Восстанавливаем зависимости и собираем проект
+RUN dotnet restore "DripChip.sln"
+RUN dotnet publish "DripChip.sln" -c Release -o /app
+
+# Используем базовый образ .NET Runtime для запуска приложения
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+
+# Копируем собранное приложение из стадии сборки
+COPY --from=build /app .
+
+# Указываем порт, который будет использовать приложение
+EXPOSE 8080
+
+# Указываем переменные окружения для подключения к PostgreSQL
+ENV ASPNETCORE_URLS=http://+:80
+ENV ConnectionStrings__DefaultConnection="Host=db;Port=5432;Database=DripChip;Username=postgres;Password=313818"
+
+# Запускаем приложение
+ENTRYPOINT ["dotnet", "DripChip.WebApi.dll"]
