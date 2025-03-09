@@ -1,4 +1,4 @@
-﻿@DripChip_HostName = https://localhost:7173
+﻿@DripChip_HostName = http://localhost:5000
 
 GET {{DripChip_HostName}}/animals/3
 Accept: application/json
